@@ -4,14 +4,20 @@ import Clock from './Clock.jsx'
 const CHEER = ['Awesome! 🎉', 'Great job! ⭐', 'You got it! 🥳', 'Super! 🚀']
 const ENCOURAGE = ["Almost! It's", 'Try again — it was', 'So close! It was']
 
-function randomTime(level) {
+// Mix of all difficulties, weighted so kids get mostly friendly times
+function randomTime() {
   const hour = 1 + Math.floor(Math.random() * 12)
+  const roll = Math.random()
   let minute
-  if (level.minutes) {
-    minute = level.minutes[Math.floor(Math.random() * level.minutes.length)]
+  if (roll < 0.4) {
+    // o'clock or half past
+    minute = Math.random() < 0.5 ? 0 : 30
+  } else if (roll < 0.75) {
+    // 5-minute steps
+    minute = Math.floor(Math.random() * 12) * 5
   } else {
-    const steps = 60 / level.step
-    minute = Math.floor(Math.random() * steps) * level.step
+    // any minute
+    minute = Math.floor(Math.random() * 60)
   }
   return { hour, minute }
 }
@@ -24,7 +30,7 @@ function formatTime({ hour, minute }) {
 function buildChoices(answer) {
   const set = new Set([formatTime(answer)])
   while (set.size < 4) {
-    const wrong = randomTime({ step: answer.minute % 5 === 0 ? 5 : 1 })
+    const wrong = randomTime()
     const key = formatTime(wrong)
     if (wrong.hour !== answer.hour || wrong.minute !== answer.minute) {
       set.add(key)
@@ -33,15 +39,15 @@ function buildChoices(answer) {
   return [...set].sort(() => Math.random() - 0.5)
 }
 
-function Quiz({ level, onBack }) {
-  const [question, setQuestion] = useState(() => randomTime(level))
+function Quiz({ onBack }) {
+  const [question, setQuestion] = useState(() => randomTime())
   const [choices, setChoices] = useState(() => buildChoices(question))
   const [picked, setPicked] = useState(null)
   const [score, setScore] = useState(0)
   const [streak, setStreak] = useState(0)
 
   function nextQuestion() {
-    const q = randomTime(level)
+    const q = randomTime()
     setQuestion(q)
     setChoices(buildChoices(q))
     setPicked(null)
@@ -68,7 +74,7 @@ function Quiz({ level, onBack }) {
     <section className="card">
       <div className="hud">
         <button className="back-btn" onClick={onBack}>
-          ⬅ Levels
+          ⬅ Menu
         </button>
         <div className="score-box">{score} ⭐</div>
         <div className="streak-box">🔥 {streak}</div>

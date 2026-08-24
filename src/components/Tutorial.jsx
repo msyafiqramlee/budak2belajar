@@ -1,81 +1,174 @@
+import { useState } from 'react'
 import Clock from './Clock.jsx'
 
+const STEPS = [
+  {
+    type: 'tap',
+    target: 'hour',
+    prompt: 'Tap the SHORT hand! 👆',
+    hint: 'The short one is the little guy!',
+    clock: { hour: 7, minute: 20 },
+  },
+  {
+    type: 'quiz',
+    prompt: 'Nice! The SHORT hand tells us the...',
+    options: ['Hour (jam) 🐢', 'Minute (minit) 🐇'],
+    answer: 0,
+    explain: 'Short & slow = HOURS (jam)!',
+  },
+  {
+    type: 'tap',
+    target: 'minute',
+    prompt: 'Now tap the LONG hand! 👆',
+    hint: 'The long one stretches far out!',
+    clock: { hour: 4, minute: 50 },
+  },
+  {
+    type: 'quiz',
+    prompt: 'Great! The LONG hand tells us the...',
+    options: ['Minute (minit) 🐇', 'Hour (jam) 🐢'],
+    answer: 0,
+    explain: 'Long & fast = MINUTES (minit)!',
+  },
+  {
+    type: 'quiz',
+    prompt: 'Look! The short hand points to 3. What time is it?',
+    options: ["3 o'clock", "6 o'clock", "12 o'clock", "9 o'clock"],
+    answer: 0,
+    explain: "Short hand on 3 → it's 3 o'clock!",
+    clock: { hour: 3, minute: 0 },
+    reveal: 'hour',
+  },
+  {
+    type: 'quiz',
+    prompt:
+      'The long hand points to 3. Each number counts 5 minutes. How many minutes?',
+    options: [':15 minutes', ':05 minutes', ':30 minutes', ':45 minutes'],
+    answer: 0,
+    explain: 'Number 3 × 5 = 15 minutes!',
+    clock: { hour: 2, minute: 15 },
+    reveal: 'minute',
+  },
+]
+
 function Tutorial({ onStart, onBack }) {
+  const [step, setStep] = useState(0)
+  const [wrong, setWrong] = useState(false)
+  const [solved, setSolved] = useState(false)
+
+  const current = STEPS[step]
+
+  function succeed() {
+    setSolved(true)
+    setWrong(false)
+  }
+
+  function next() {
+    setSolved(false)
+    setWrong(false)
+    setStep((s) => s + 1)
+  }
+
+  function handleQuizPick(index) {
+    if (solved) return
+    if (index === current.answer) {
+      succeed()
+    } else {
+      setWrong(true)
+    }
+  }
+
+  const isLast = step === STEPS.length - 1
+
   return (
     <section className="card">
       <div className="hud">
         <button className="back-btn" onClick={onBack}>
           ⬅ Back
         </button>
+        <div className="score-box">
+          Lesson {Math.min(step + 1, STEPS.length)} / {STEPS.length}
+        </div>
       </div>
 
-      <h2 className="question">📖 How to read a clock</h2>
-      <p className="tutorial-intro">
-        A clock has two hands (<em>jarum</em>). One is short, one is long!
+      <div className="progress-track">
+        <div
+          className="progress-fill"
+          style={{ width: `${(step / STEPS.length) * 100}%` }}
+        />
+      </div>
+
+      {current.type === 'tap' ? (
+        <>
+          <h2 className="question">{current.prompt}</h2>
+          {!solved && <p className="hint">{current.hint}</p>}
+          <div className="clock-container">
+            <Clock
+              hour={current.clock.hour}
+              minute={current.clock.minute}
+              onHourClick={
+                current.target === 'hour'
+                  ? () => succeed()
+                  : () => setWrong(true)
+              }
+              onMinuteClick={
+                current.target === 'minute'
+                  ? () => succeed()
+                  : () => setWrong(true)
+              }
+              reveal={solved ? current.target : null}
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <h2 className="question">{current.prompt}</h2>
+          {current.clock && (
+            <div className="clock-container">
+              <Clock
+                hour={current.clock.hour}
+                minute={current.clock.minute}
+                reveal={current.reveal}
+              />
+            </div>
+          )}
+          <div className="choices single-col">
+            {current.options.map((option, index) => (
+              <button
+                key={option}
+                className={
+                  'choice-btn' +
+                  (solved && index === current.answer ? ' correct' : '') +
+                  (wrong && index !== current.answer ? ' wrong' : '')
+                }
+                disabled={solved}
+                onClick={() => handleQuizPick(index)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      <p id="feedback" className={wrong ? 'bad' : solved ? 'good' : ''}>
+        {solved
+          ? `✅ Correct! ${current.explain}`
+          : wrong
+            ? 'Oops, try again! 💪'
+            : ''}
       </p>
 
-      <div className="lesson">
-        <h3>1️⃣ The SHORT hand = Hour hand</h3>
-        <p>
-          <strong>Jarum pendek</strong> menunjukkan <strong>JAM</strong>.
-          It only points to the big numbers: 1, 2, 3... 12.
-        </p>
-        <div className="lesson-clock">
-          <Clock hour={3} minute={0} />
-          <p className="lesson-caption">
-            The short hand points to <strong>3</strong> → it is{' '}
-            <strong>3 o'clock</strong> (pukul 3)!
-          </p>
-        </div>
-      </div>
-
-      <div className="lesson">
-        <h3>2️⃣ The LONG hand = Minute hand</h3>
-        <p>
-          <strong>Jarum panjang</strong> menunjukkan <strong>MINIT</strong>.
-          Count in fives: each number it passes means 5 more minutes.
-        </p>
-        <div className="minute-table">
-          {[
-            ['1', '5'],
-            ['2', '10'],
-            ['3', '15'],
-            ['6', '30'],
-            ['9', '45'],
-            ['12', '0'],
-          ].map(([num, min]) => (
-            <div key={num} className="minute-chip">
-              <span className="minute-num">{num}</span>→{' '}
-              <span className="minute-val">:{String(min).padStart(2, '0')}</span>
-            </div>
-          ))}
-        </div>
-        <div className="lesson-clock">
-          <Clock hour={10} minute={15} />
-          <p className="lesson-caption">
-            Short hand is past <strong>10</strong>, long hand points to{' '}
-            <strong>3</strong> (= 15 minutes) → it is{' '}
-            <strong>10:15</strong> (pukul 10:15)!
-          </p>
-        </div>
-      </div>
-
-      <div className="lesson">
-        <h3>💡 Remember!</h3>
-        <ul className="tips">
-          <li>
-            Short &amp; slow = <strong>HOURS</strong> (jam) 🐢
-          </li>
-          <li>
-            Long &amp; fast = <strong>MINUTES</strong> (minit) 🐇
-          </li>
-          <li>Read the short hand FIRST, then the long hand.</li>
-        </ul>
-      </div>
-
-      <button className="next-btn" onClick={onStart}>
-        I'm ready! Start the quiz 🎯
-      </button>
+      {solved &&
+        (isLast ? (
+          <button className="next-btn" onClick={onStart}>
+            You learned it all! 🎉 Start Practice ➡
+          </button>
+        ) : (
+          <button className="next-btn" onClick={next}>
+            Next lesson ➡
+          </button>
+        ))}
     </section>
   )
 }

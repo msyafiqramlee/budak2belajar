@@ -72,6 +72,54 @@ main {
   margin-top: 16px;
 }
 
+.levels.two-col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.level-btn.big {
+  padding: 28px 10px;
+}
+
+.hand-reveal {
+  animation: hand-pop 0.4s ease;
+}
+
+@keyframes hand-pop {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Tutorial progress */
+.progress-track {
+  height: 12px;
+  background: #eef2f7;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #55efc4, #74b9ff);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.hint {
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 1rem;
+  min-height: 1.5em;
+}
+
+.choices.single-col {
+  grid-template-columns: 1fr;
+}
+
 .level-btn {
   border: 3px solid #ffe08a;
   background: #fffbe9;

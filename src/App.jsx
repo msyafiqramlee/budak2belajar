@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import LevelSelect from './components/LevelSelect.jsx'
+import Menu from './components/Menu.jsx'
 import Tutorial from './components/Tutorial.jsx'
 import Quiz from './components/Quiz.jsx'
 import './App.css'
 
 function App() {
   const [view, setView] = useState('menu')
-  const [level, setLevel] = useState(null)
 
   return (
     <div className="app">
@@ -17,26 +16,18 @@ function App() {
 
       <main>
         {view === 'menu' && (
-          <LevelSelect
-            onSelect={(lvl) => {
-              setLevel(lvl)
-              setView('quiz')
-            }}
-            onLearn={() => setView('tutorial')}
+          <Menu
+            onLearn={() => setView('learn')}
+            onPractice={() => setView('quiz')}
           />
         )}
-        {view === 'tutorial' && (
+        {view === 'learn' && (
           <Tutorial
-            onStart={() => {
-              setLevel(null)
-              setView('menu')
-            }}
+            onStart={() => setView('quiz')}
             onBack={() => setView('menu')}
           />
         )}
-        {view === 'quiz' && (
-          <Quiz level={level} onBack={() => setView('menu')} />
-        )}
+        {view === 'quiz' && <Quiz onBack={() => setView('menu')} />}
       </main>
 
       <footer>Made with ❤️ for little time-tellers</footer>
