@@ -269,6 +269,79 @@ main {
   transform: translateY(-2px);
 }
 
+/* Tutorial */
+.tutorial-intro {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.lesson {
+  background: #f7fbff;
+  border: 3px solid #d6ecff;
+  border-radius: 18px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.lesson h3 {
+  color: #4a69bd;
+  margin-bottom: 6px;
+  font-size: 1.15rem;
+}
+
+.lesson p {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.lesson-clock {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.lesson-clock svg {
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.lesson-caption {
+  font-size: 1rem !important;
+}
+
+.minute-table {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.minute-chip {
+  background: #fffbe9;
+  border: 2px solid #ffe08a;
+  border-radius: 12px;
+  padding: 6px 4px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.minute-num {
+  color: #e17055;
+}
+
+.minute-val {
+  color: #00b894;
+}
+
+.tips {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 1.05rem;
+}
+
 footer {
   padding: 16px;
   color: #ffffff;
