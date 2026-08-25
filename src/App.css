@@ -1533,3 +1533,58 @@ button:focus-visible {
   .module-heading > p { max-width: none; }
   .mixed-practice-card .primary-action, .prerequisite-banner .secondary-action { width: 100%; justify-content: center; }
 }
+
+/* Compact application layout: prioritise learning content above decoration. */
+@media (min-width: 981px) {
+  .sidebar { width: 236px; padding: 20px 14px 16px; }
+  .brand { padding: 0 6px 20px; }
+  .nav-item { min-height: 54px; padding: 8px 10px; }
+  .nav-icon { width: 30px; height: 30px; flex-basis: 30px; font-size: 1.25rem; }
+  .app-content { margin-left: 236px; }
+}
+
+.page-header { min-height: 74px; padding-block: 13px; }
+.workspace { padding-top: clamp(20px, 2.4vw, 32px); padding-bottom: 36px; }
+.topic-hero { min-height: 270px; gap: 26px; padding: clamp(28px, 3.5vw, 42px); }
+.topic-hero h2 { font-size: clamp(1.85rem, 3.2vw, 2.7rem); }
+.topic-hero-copy > p { margin-top: 12px; line-height: 1.55; }
+.hero-actions { margin-top: 20px; }
+.topic-facts { margin-top: 20px; padding-top: 14px; }
+.hero-clock-face { width: min(210px, 20vw); }
+.dashboard-grid { margin-top: 14px; gap: 14px; }
+.path-card, .practice-card { padding: 22px; }
+.skill-path { margin-top: 14px; }
+.skill-path li { min-height: 58px; padding: 10px 0; }
+.practice-icon { margin-bottom: 16px; }
+
+.library-hero { min-height: 190px; gap: 24px; padding: 28px 34px; }
+.library-hero h2 { margin-top: 7px; font-size: clamp(1.9rem, 3.6vw, 2.8rem); }
+.library-hero > div > p { margin-top: 8px; line-height: 1.5; }
+.library-symbol { font-size: clamp(2.5rem, 5vw, 4.2rem); }
+.library-hero .topic-facts { margin-top: 16px; }
+.prerequisite-banner { margin-top: 14px; padding: 14px 18px; }
+.module-heading { align-items: end; margin-top: 24px; }
+.module-grid { gap: 12px; margin-top: 12px; }
+.module-card { min-height: 178px; gap: 8px 13px; padding: 17px 18px; border-radius: 14px; }
+.module-symbol { width: 40px; height: 40px; font-size: 1.15rem; }
+.module-copy p { margin-top: 6px; line-height: 1.4; }
+.module-prerequisite { padding: 6px 9px; }
+.mixed-practice-card { margin-top: 14px; padding: 20px 22px; }
+
+.card { padding: 26px; }
+.question { margin-bottom: 13px; }
+.math-expression { margin-bottom: 15px; padding: 9px 20px; }
+.learning-visual { margin-bottom: 17px; }
+.fraction-bar { height: 62px; }
+.progress-track { margin-bottom: 18px; }
+
+@media (max-width: 720px) {
+  .page-header { min-height: 62px; }
+  .workspace { padding-top: 12px; }
+  .topic-hero, .library-hero { padding: 22px 20px; }
+  .topic-hero-copy > p { margin-top: 10px; }
+  .topic-facts { margin-top: 15px; }
+  .module-heading { margin-top: 20px; }
+  .module-card { min-height: 0; }
+  .prerequisite-banner, .mixed-practice-card { padding: 17px; }
+}
