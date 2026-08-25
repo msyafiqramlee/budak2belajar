@@ -5,14 +5,30 @@ function handleKeyActivate(event, handler) {
   }
 }
 
-function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
+function Clock({
+  hour,
+  minute,
+  onHourClick,
+  onMinuteClick,
+  reveal,
+  showMinuteLabels = false,
+  highlightMinute = null,
+}) {
   const minuteAngle = minute * 6
   const hourAngle = (hour % 12) * 30 + minute * 0.5
 
   const numbers = []
   const minuteTicks = []
+  const minuteLabels = []
+  const highlightBase =
+    highlightMinute === null ? null : Math.floor(highlightMinute / 5) * 5
+
   for (let i = 0; i < 60; i++) {
     const isFiveMinuteMark = i % 5 === 0
+    const isHighlighted =
+      highlightMinute !== null &&
+      i >= highlightBase &&
+      i <= highlightMinute
     minuteTicks.push(
       <line
         key={`tick-${i}`}
@@ -20,16 +36,41 @@ function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
         y1={isFiveMinuteMark ? '14' : '10'}
         x2="100"
         y2="17"
-        stroke={isFiveMinuteMark ? '#2563eb' : '#cbd5e1'}
-        strokeWidth={isFiveMinuteMark ? '2' : '1'}
+        stroke={
+          isHighlighted
+            ? '#e76f51'
+            : isFiveMinuteMark
+              ? '#2563eb'
+              : '#cbd5e1'
+        }
+        strokeWidth={isHighlighted ? '3' : isFiveMinuteMark ? '2' : '1'}
         transform={`rotate(${i * 6} 100 100)`}
       />,
     )
   }
 
+  if (showMinuteLabels) {
+    for (let i = 0; i < 12; i++) {
+      const minuteValue = i * 5
+      const angle = i * 30 * (Math.PI / 180)
+      const r = 81
+      minuteLabels.push(
+        <text
+          key={`minute-label-${minuteValue}`}
+          x={100 + r * Math.sin(angle)}
+          y={100 - r * Math.cos(angle) + 3}
+          textAnchor="middle"
+          className="clock-minute-label"
+        >
+          {String(minuteValue).padStart(2, '0')}
+        </text>,
+      )
+    }
+  }
+
   for (let i = 1; i <= 12; i++) {
     const angle = i * 30 * (Math.PI / 180)
-    const r = 74
+    const r = showMinuteLabels ? 63 : 74
     numbers.push(
       <text
         key={i}
@@ -53,6 +94,7 @@ function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
     >
       <circle cx="100" cy="100" r="95" fill="#ffffff" stroke="#2563eb" strokeWidth="8" />
       {minuteTicks}
+      {minuteLabels}
       {numbers}
       <g
         className="clock-hand-control"

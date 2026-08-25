@@ -6,8 +6,8 @@ function Menu({ onLearn, onPractice }) {
           <span className="eyebrow">Analog time · Foundation</span>
           <h2>Master the clock, one skill at a time.</h2>
           <p>
-            Learn what each hand means, connect clock numbers to minutes, and
-            practise reading time with confidence.
+            Learn what each hand means, count minute landmarks, read exact
+            ticks, and understand how the hour hand moves.
           </p>
           <div className="hero-actions">
             <button className="primary-action" onClick={onLearn}>
@@ -18,8 +18,8 @@ function Menu({ onLearn, onPractice }) {
             </button>
           </div>
           <div className="topic-facts" aria-label="Topic details">
-            <span><strong>6</strong> guided steps</span>
-            <span><strong>5 min</strong> focused session</span>
+            <span><strong>12</strong> guided steps</span>
+            <span><strong>3 parts</strong> clear progression</span>
             <span><strong>EN + BM</strong> key terms</span>
           </div>
         </div>
@@ -51,23 +51,30 @@ function Menu({ onLearn, onPractice }) {
             <li>
               <span className="skill-number">01</span>
               <span className="skill-copy">
-                <strong>Meet the clock hands</strong>
-                <small>Know which hand shows hours and minutes.</small>
+                <strong>Hands and whole hours</strong>
+                <small>Know which hand shows hours, minutes, and :00.</small>
               </span>
               <span className="skill-tag">Start here</span>
             </li>
             <li>
               <span className="skill-number">02</span>
               <span className="skill-copy">
-                <strong>Read whole hours</strong>
-                <small>Connect the short hand to o'clock times.</small>
+                <strong>Minutes by five</strong>
+                <small>Connect numbered stops to 05, 10, 15 and beyond.</small>
               </span>
             </li>
             <li>
               <span className="skill-number">03</span>
               <span className="skill-copy">
-                <strong>Count minutes by five</strong>
-                <small>Follow the long hand around the clock face.</small>
+                <strong>Exact minute ticks</strong>
+                <small>Count forward from a five-minute landmark.</small>
+              </span>
+            </li>
+            <li>
+              <span className="skill-number">04</span>
+              <span className="skill-copy">
+                <strong>The moving hour hand</strong>
+                <small>Read the hour already passed as the hand moves forward.</small>
               </span>
             </li>
           </ol>
@@ -77,7 +84,7 @@ function Menu({ onLearn, onPractice }) {
           <span className="practice-icon" aria-hidden="true">◎</span>
           <span className="eyebrow dark">Quick practice</span>
           <h3>Ready to test yourself?</h3>
-          <p>Read friendly five-minute times and get a helpful hint when needed.</p>
+          <p>Choose foundation, five-minute, or exact-minute questions at any time.</p>
           <button className="secondary-action full-width" onClick={onPractice}>
             Open practice
           </button>
