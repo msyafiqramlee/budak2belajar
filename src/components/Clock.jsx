@@ -20,7 +20,7 @@ function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
         y1={isFiveMinuteMark ? '14' : '10'}
         x2="100"
         y2="17"
-        stroke={isFiveMinuteMark ? '#4a69bd' : '#b8c7dc'}
+        stroke={isFiveMinuteMark ? '#2563eb' : '#cbd5e1'}
         strokeWidth={isFiveMinuteMark ? '2' : '1'}
         transform={`rotate(${i * 6} 100 100)`}
       />,
@@ -51,7 +51,7 @@ function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
       role="img"
       aria-label={`Clock showing ${hour}:${formattedMinute}`}
     >
-      <circle cx="100" cy="100" r="95" fill="#ffffff" stroke="#4a69bd" strokeWidth="8" />
+      <circle cx="100" cy="100" r="95" fill="#ffffff" stroke="#2563eb" strokeWidth="8" />
       {minuteTicks}
       {numbers}
       <g
@@ -77,7 +77,7 @@ function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
           y1="100"
           x2="100"
           y2="52"
-          stroke="#2d3436"
+          stroke="#17263c"
           strokeWidth="7"
           strokeLinecap="round"
           className={`clock-hand-visible${reveal === 'hour' ? ' hand-reveal' : ''}`}
@@ -107,14 +107,14 @@ function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
           y1="100"
           x2="100"
           y2="32"
-          stroke="#e17055"
+          stroke="#e76f51"
           strokeWidth="5"
           strokeLinecap="round"
           className={`clock-hand-visible${reveal === 'minute' ? ' hand-reveal' : ''}`}
           transform={`rotate(${minuteAngle} 100 100)`}
         />
       </g>
-      <circle cx="100" cy="100" r="6" fill="#2d3436" />
+      <circle cx="100" cy="100" r="6" fill="#17263c" />
     </svg>
   )
 }
