@@ -1481,3 +1481,55 @@ button:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Number operations and fraction learning areas */
+.library-hero { min-height: 285px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 30px; overflow: hidden; padding: clamp(32px, 5vw, 54px); color: #fff; border-radius: 24px; background: linear-gradient(135deg, #0d1b2e, #173b63 64%, #0f766e); box-shadow: var(--shadow-md); }
+.topic-library.fractions .library-hero { background: linear-gradient(135deg, #111c32, #283f70 62%, #46615d); }
+.library-hero h2 { margin-top: 12px; font-size: clamp(2.2rem, 5vw, 3.6rem); letter-spacing: -0.055em; }
+.library-hero > div > p { max-width: 680px; margin-top: 14px; color: #cad5e4; line-height: 1.65; }
+.library-symbol { max-width: 290px; color: rgba(255,255,255,.92); font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 800; letter-spacing: -.08em; white-space: nowrap; }
+.prerequisite-banner { display: flex; align-items: center; gap: 16px; margin-top: 20px; padding: 20px 22px; border: 1px solid #b8cdf8; border-radius: 16px; background: var(--blue-50); }
+.prerequisite-banner > span { width: 42px; height: 42px; display: grid; flex: 0 0 42px; place-items: center; color: var(--blue-700); border-radius: 10px; background: var(--blue-100); }
+.prerequisite-banner div { flex: 1; }
+.prerequisite-banner strong { font-size: .9rem; }
+.prerequisite-banner p { margin-top: 4px; color: var(--slate-600); font-size: .78rem; line-height: 1.5; }
+.module-heading { display: flex; justify-content: space-between; gap: 30px; margin-top: 36px; }
+.module-heading h3, .mixed-practice-card h3 { margin-top: 6px; font-size: 1.25rem; }
+.module-heading > p { max-width: 430px; color: var(--slate-500); font-size: .78rem; line-height: 1.55; }
+.module-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+.module-card { position: relative; min-height: 235px; display: grid; grid-template-columns: auto 1fr; align-content: start; gap: 12px 16px; padding: 23px; overflow: hidden; color: var(--slate-900); text-align: left; border: 1px solid var(--slate-200); border-radius: 17px; background: #fff; box-shadow: var(--shadow-sm); cursor: pointer; transition: 160ms ease; }
+.module-card:hover { transform: translateY(-3px); border-color: #a9bfe8; box-shadow: var(--shadow-md); }
+.module-order { color: var(--slate-500); font-size: .68rem; font-weight: 800; }
+.module-symbol { width: 48px; height: 48px; display: grid; grid-row: span 2; place-items: center; color: var(--blue-700); font-size: 1.35rem; font-weight: 800; border-radius: 12px; background: var(--blue-50); }
+.module-card.teal .module-symbol { color: var(--teal-700); background: #e6fffa; }
+.module-card.violet .module-symbol { color: #6d28d9; background: #f3e8ff; }
+.module-card.amber .module-symbol { color: #a65308; background: #fff4d6; }
+.module-copy strong, .module-copy small { display: block; }
+.module-copy strong { font-size: 1rem; }
+.module-copy small { margin-top: 3px; color: var(--blue-700); font-size: .7rem; font-weight: 750; }
+.module-copy p { margin-top: 10px; color: var(--slate-500); font-size: .78rem; line-height: 1.55; }
+.module-prerequisite { grid-column: 1 / -1; padding: 9px 11px; color: var(--slate-600); font-size: .67rem; line-height: 1.4; border-radius: 8px; background: var(--slate-100); }
+.module-start { grid-column: 1 / -1; align-self: end; color: var(--blue-700); font-size: .73rem; font-weight: 800; }
+.mixed-practice-card { display: flex; align-items: center; justify-content: space-between; gap: 26px; margin-top: 20px; padding: 28px; border: 1px solid var(--slate-200); border-radius: 17px; background: #fff; }
+.mixed-practice-card p { max-width: 590px; margin-top: 7px; color: var(--slate-500); font-size: .78rem; line-height: 1.5; }
+.math-expression { width: fit-content; margin: 4px auto 22px; padding: 12px 24px; color: var(--navy-900); font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800; border-radius: 12px; background: var(--slate-100); }
+.learning-visual { width: min(520px, 100%); display: flex; justify-content: center; gap: 18px; margin: 4px auto 24px; }
+.fraction-bar { min-width: min(400px, 70vw); height: 74px; display: flex; overflow: hidden; border: 3px solid var(--navy-900); border-radius: 8px; background: #fff; }
+.fraction-bar span { flex: 1; border-left: 2px solid var(--navy-900); }
+.fraction-bar span:first-child { border-left: 0; }
+.fraction-bar span.shaded { background: #72a4ff; }
+.double-fraction-bar { flex-direction: column; align-items: center; }
+.double-fraction-bar > div { display: flex; align-items: center; gap: 13px; }
+.double-fraction-bar .fraction-bar { min-width: min(340px, 62vw); height: 52px; }
+.group-visual { flex-wrap: wrap; }
+.object-group { min-width: 72px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 10px; border: 2px solid #9db8e9; border-radius: 12px; background: var(--blue-50); }
+.object-group span { width: 13px; height: 13px; border-radius: 50%; background: var(--blue-600); }
+
+@media (max-width: 720px) {
+  .library-hero { min-height: auto; grid-template-columns: 1fr; padding: 30px 24px; border-radius: 18px; }
+  .library-symbol { display: none; }
+  .module-grid { grid-template-columns: 1fr; }
+  .module-heading, .mixed-practice-card, .prerequisite-banner { align-items: flex-start; flex-direction: column; }
+  .module-heading > p { max-width: none; }
+  .mixed-practice-card .primary-action, .prerequisite-banner .secondary-action { width: 100%; justify-content: center; }
+}
