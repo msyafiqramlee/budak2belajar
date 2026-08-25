@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Clock from './Clock.jsx'
 
 const CHEER = ['Excellent work.', 'Correct — well done.', 'You got it.', 'Strong answer.']
+const SESSION_LENGTH = 10
 
 const PRACTICE_LEVELS = [
   {
@@ -100,6 +101,8 @@ function Quiz({ onBack }) {
   const [feedback, setFeedback] = useState('')
   const [score, setScore] = useState(0)
   const [streak, setStreak] = useState(0)
+  const [history, setHistory] = useState([])
+  const [showSummary, setShowSummary] = useState(false)
 
   function startLevel(nextLevel) {
     const q = randomTime(nextLevel)
@@ -112,9 +115,15 @@ function Quiz({ onBack }) {
     setFeedback('')
     setScore(0)
     setStreak(0)
+    setHistory([])
+    setShowSummary(false)
   }
 
   function nextQuestion() {
+    if (history.length >= SESSION_LENGTH) {
+      setShowSummary(true)
+      return
+    }
     const q = randomTime(level)
     setQuestion(q)
     setChoices(buildChoices(q))
@@ -132,6 +141,10 @@ function Quiz({ onBack }) {
     setSolved(false)
     setRevealed(false)
     setFeedback('')
+    setScore(0)
+    setStreak(0)
+    setHistory([])
+    setShowSummary(false)
   }
 
   if (!level) {
@@ -172,10 +185,26 @@ function Quiz({ onBack }) {
     if (solved || revealed || wrongChoices.includes(choice)) return
     const correct = choice === formatTime(question)
     if (correct) {
+      const correctFirstTry = wrongChoices.length === 0
       setSolved(true)
-      setFeedback(CHEER[score % CHEER.length])
-      setScore((s) => s + 1)
-      setStreak((s) => s + 1)
+      setFeedback(
+        correctFirstTry
+          ? CHEER[score % CHEER.length]
+          : 'Correct after using the hint. Keep practising this pattern.',
+      )
+      setHistory((currentHistory) => [
+        ...currentHistory,
+        {
+          question: formatTime(question),
+          firstAnswer: wrongChoices[0] || choice,
+          correctAnswer: formatTime(question),
+          result: correctFirstTry ? 'correct' : 'hint',
+        },
+      ])
+      if (correctFirstTry) {
+        setScore((s) => s + 1)
+        setStreak((s) => s + 1)
+      }
     } else {
       const nextWrongChoices = [...wrongChoices, choice]
       setWrongChoices(nextWrongChoices)
@@ -185,6 +214,15 @@ function Quiz({ onBack }) {
       } else {
         setRevealed(true)
         setFeedback(`The answer is ${formatTime(question)}. Let's try another!`)
+        setHistory((currentHistory) => [
+          ...currentHistory,
+          {
+            question: formatTime(question),
+            firstAnswer: nextWrongChoices[0],
+            correctAnswer: formatTime(question),
+            result: 'revealed',
+          },
+        ])
       }
     }
   }
@@ -192,6 +230,81 @@ function Quiz({ onBack }) {
   const correctAnswer = formatTime(question)
   const finished = solved || revealed
   const levelInfo = PRACTICE_LEVELS.find((item) => item.id === level)
+  const questionNumber = Math.min(
+    history.length + (finished ? 0 : 1),
+    SESSION_LENGTH,
+  )
+
+  if (showSummary) {
+    const successRate = Math.round((score / SESSION_LENGTH) * 100)
+    const hintCount = history.filter((item) => item.result === 'hint').length
+    const revealedCount = history.filter(
+      (item) => item.result === 'revealed',
+    ).length
+
+    return (
+      <section className="card session-summary practice-summary">
+        <span className="eyebrow dark">{levelInfo.name} complete</span>
+        <h2>Your practice results</h2>
+        <p className="summary-intro">
+          You answered {SESSION_LENGTH} clock questions. Review your first
+          answers to see which patterns need another look.
+        </p>
+
+        <div className="summary-score-grid">
+          <div className="summary-score primary">
+            <strong>{successRate}%</strong>
+            <span>First-attempt success</span>
+          </div>
+          <div className="summary-score">
+            <strong>{score}/{SESSION_LENGTH}</strong>
+            <span>Correct first try</span>
+          </div>
+          <div className="summary-score">
+            <strong>{hintCount + revealedCount}</strong>
+            <span>Needed support</span>
+          </div>
+        </div>
+
+        <div className="result-review answer-review">
+          <h3>Answer review</h3>
+          <ol>
+            {history.map((item, index) => (
+              <li key={`${item.question}-${index}`}>
+                <span className="result-number">{index + 1}</span>
+                <span className="answer-detail">
+                  <strong>Clock: {item.question}</strong>
+                  <small>
+                    Your first answer: {item.firstAnswer} · Correct answer:{' '}
+                    {item.correctAnswer}
+                  </small>
+                </span>
+                <span className={`result-status ${item.result}`}>
+                  {item.result === 'correct'
+                    ? 'Correct'
+                    : item.result === 'hint'
+                      ? 'Used hint'
+                      : 'Review'}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className="summary-actions">
+          <button className="primary-action" onClick={() => startLevel(level)}>
+            Try another 10 →
+          </button>
+          <button className="secondary-action bordered" onClick={chooseAnotherLevel}>
+            Change level
+          </button>
+          <button className="text-action" onClick={onBack}>
+            Back to learning path
+          </button>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="card">
@@ -200,6 +313,7 @@ function Quiz({ onBack }) {
           ← Levels
         </button>
         <div className="quiz-level-label">{levelInfo.name}</div>
+        <div className="score-box">{questionNumber}/{SESSION_LENGTH}</div>
         <div className="score-box">Score {score}</div>
         <div className="streak-box">Streak {streak}</div>
       </div>
@@ -243,7 +357,7 @@ function Quiz({ onBack }) {
 
       {finished && (
         <button className="next-btn" onClick={nextQuestion}>
-          Next ➡
+          {history.length >= SESSION_LENGTH ? 'View results →' : 'Next →'}
         </button>
       )}
     </section>

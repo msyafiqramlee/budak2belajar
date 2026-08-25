@@ -26,27 +26,15 @@ const STEPS = [
     section: 1,
     sectionTitle: 'Hands and whole hours',
     type: 'quiz',
-    prompt: 'The long hand is on 12. How many minutes have passed?',
-    options: [':00 minutes', ':12 minutes', ':05 minutes', ':60 minutes'],
-    answer: 0,
-    explain: 'At 12, the minute count starts at :00.',
-    tryAgain: 'The minute count begins at the top of the clock. Look for 00.',
-    clock: { hour: 3, minute: 0 },
-    showMinuteLabels: true,
-    reveal: 'minute',
-    visualNote: 'The top of the clock is the starting point: 12 means :00 minutes.',
-  },
-  {
-    section: 1,
-    sectionTitle: 'Hands and whole hours',
-    type: 'quiz',
-    prompt: 'The minute hand is on :00 and the hour hand is on 3. What time is it?',
+    prompt: 'The long hand is on 12 (:00) and the short hand is on 3. What time is it?',
     options: ["3 o'clock", "6 o'clock", "12 o'clock", "9 o'clock"],
     answer: 0,
     explain: "The short hand is on 3, so it is 3 o'clock.",
     tryAgain: 'Read the short dark hand when the long hand is at :00.',
     clock: { hour: 3, minute: 0 },
+    showMinuteLabels: true,
     reveal: 'hour',
+    visualNote: 'At the top of the clock, 12 means :00 minutes.',
   },
   {
     section: 2,
@@ -122,21 +110,6 @@ const STEPS = [
     section: 3,
     sectionTitle: 'Exact minutes and moving hours',
     type: 'quiz',
-    prompt: 'The long hand is 3 small ticks after :30. What minute is it?',
-    options: [':33 minutes', ':30 minutes', ':03 minutes', ':35 minutes'],
-    answer: 0,
-    explain: 'Start at 30, then count 31, 32, 33.',
-    tryAgain: 'Begin at the nearest five-minute label, then count each small tick.',
-    clock: { hour: 10, minute: 33 },
-    showMinuteLabels: true,
-    highlightMinute: 33,
-    reveal: 'minute',
-    visualNote: '30 + 3 small ticks = 33 minutes.',
-  },
-  {
-    section: 3,
-    sectionTitle: 'Exact minutes and moving hours',
-    type: 'quiz',
     prompt: 'The short hand has passed 2 but has not reached 3. Which hour is it?',
     options: ['2', '3', '9', '45'],
     answer: 0,
@@ -166,20 +139,40 @@ function Tutorial({ onStart, onBack }) {
   const [tapWrong, setTapWrong] = useState(false)
   const [wrongChoice, setWrongChoice] = useState(null)
   const [solved, setSolved] = useState(false)
+  const [mistakes, setMistakes] = useState(0)
+  const [outcomes, setOutcomes] = useState([])
+  const [showSummary, setShowSummary] = useState(false)
 
   const current = STEPS[step]
 
   function succeed() {
+    if (solved) return
     setSolved(true)
     setTapWrong(false)
     setWrongChoice(null)
+    setOutcomes((currentOutcomes) => {
+      if (currentOutcomes.length > step) return currentOutcomes
+      return [
+        ...currentOutcomes,
+        {
+          prompt: current.prompt,
+          correctFirstTry: mistakes === 0,
+        },
+      ]
+    })
   }
 
   function next() {
     setSolved(false)
     setTapWrong(false)
     setWrongChoice(null)
+    setMistakes(0)
     setStep((s) => s + 1)
+  }
+
+  function registerTapMistake() {
+    setTapWrong(true)
+    setMistakes((count) => count + 1)
   }
 
   function handleQuizPick(index) {
@@ -188,11 +181,86 @@ function Tutorial({ onStart, onBack }) {
       succeed()
     } else {
       setWrongChoice(index)
+      setMistakes((count) => count + 1)
     }
+  }
+
+  function restartLesson() {
+    setStep(0)
+    setTapWrong(false)
+    setWrongChoice(null)
+    setSolved(false)
+    setMistakes(0)
+    setOutcomes([])
+    setShowSummary(false)
   }
 
   const isLast = step === STEPS.length - 1
   const madeMistake = tapWrong || wrongChoice !== null
+
+  if (showSummary) {
+    const firstTryCount = outcomes.filter(
+      (outcome) => outcome.correctFirstTry,
+    ).length
+    const successRate = Math.round((firstTryCount / STEPS.length) * 100)
+
+    return (
+      <section className="card session-summary">
+        <span className="eyebrow dark">Guided lesson complete</span>
+        <h2>Your lesson results</h2>
+        <p className="summary-intro">
+          You completed all {STEPS.length} steps. First-attempt success shows
+          which ideas already feel confident.
+        </p>
+
+        <div className="summary-score-grid">
+          <div className="summary-score primary">
+            <strong>{successRate}%</strong>
+            <span>First-attempt success</span>
+          </div>
+          <div className="summary-score">
+            <strong>{firstTryCount}/{STEPS.length}</strong>
+            <span>Correct without help</span>
+          </div>
+          <div className="summary-score">
+            <strong>{STEPS.length - firstTryCount}</strong>
+            <span>Completed with support</span>
+          </div>
+        </div>
+
+        <div className="result-review">
+          <h3>Step review</h3>
+          <ol>
+            {outcomes.map((outcome, index) => (
+              <li key={`${outcome.prompt}-${index}`}>
+                <span className="result-number">{index + 1}</span>
+                <span className="result-question">{outcome.prompt}</span>
+                <span
+                  className={`result-status ${
+                    outcome.correctFirstTry ? 'success' : 'supported'
+                  }`}
+                >
+                  {outcome.correctFirstTry ? 'First try' : 'With support'}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className="summary-actions">
+          <button className="primary-action" onClick={onStart}>
+            Continue to practice →
+          </button>
+          <button className="secondary-action bordered" onClick={restartLesson}>
+            Repeat lesson
+          </button>
+          <button className="text-action" onClick={onBack}>
+            Back to learning path
+          </button>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="card">
@@ -231,12 +299,12 @@ function Tutorial({ onStart, onBack }) {
               onHourClick={
                 current.target === 'hour'
                   ? () => succeed()
-                  : () => setTapWrong(true)
+                  : registerTapMistake
               }
               onMinuteClick={
                 current.target === 'minute'
                   ? () => succeed()
-                  : () => setTapWrong(true)
+                  : registerTapMistake
               }
               reveal={solved ? current.target : null}
               showMinuteLabels={current.showMinuteLabels}
@@ -298,8 +366,8 @@ function Tutorial({ onStart, onBack }) {
 
       {solved &&
         (isLast ? (
-          <button className="next-btn" onClick={onStart}>
-            Guided lesson complete · Start practice →
+          <button className="next-btn" onClick={() => setShowSummary(true)}>
+            View lesson results →
           </button>
         ) : (
           <button className="next-btn" onClick={next}>

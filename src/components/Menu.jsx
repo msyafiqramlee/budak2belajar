@@ -18,7 +18,7 @@ function Menu({ onLearn, onPractice }) {
             </button>
           </div>
           <div className="topic-facts" aria-label="Topic details">
-            <span><strong>12</strong> guided steps</span>
+            <span><strong>10</strong> guided steps</span>
             <span><strong>3 parts</strong> clear progression</span>
             <span><strong>EN + BM</strong> key terms</span>
           </div>
