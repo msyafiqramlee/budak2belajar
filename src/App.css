@@ -33,8 +33,7 @@ h1 {
 
 .subtitle {
   font-size: 1.1rem;
-  color: #ffffff;
-  opacity: 0.9;
+  color: #174a66;
   margin-top: 4px;
 }
 
@@ -82,6 +81,16 @@ main {
 
 .hand-reveal {
   animation: hand-pop 0.4s ease;
+  filter: drop-shadow(0 0 5px #00b894);
+}
+
+.clock-hand-control:focus-visible {
+  outline: none;
+}
+
+.clock-hand-control:focus-visible .clock-hand-visible {
+  stroke-width: 10;
+  filter: drop-shadow(0 0 5px #74b9ff);
 }
 
 @keyframes hand-pop {
@@ -111,7 +120,7 @@ main {
 
 .hint {
   text-align: center;
-  color: #7f8c8d;
+  color: #596566;
   font-size: 1rem;
   min-height: 1.5em;
 }
@@ -153,7 +162,7 @@ main {
 
 .level-desc {
   font-size: 0.85rem;
-  color: #7f8c8d;
+  color: #596566;
 }
 
 /* Quiz HUD */
@@ -171,6 +180,7 @@ main {
   background: #eee;
   border-radius: 12px;
   padding: 8px 12px;
+  min-height: 44px;
   cursor: pointer;
 }
 
@@ -392,6 +402,32 @@ main {
 
 footer {
   padding: 16px;
-  color: #ffffff;
+  color: #1e5b66;
   font-size: 0.85rem;
+}
+
+button:focus-visible {
+  outline: 4px solid #2d3436;
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .levels.two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 22px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

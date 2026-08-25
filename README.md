@@ -1,16 +1,30 @@
-# React + Vite
+# Budak2Belajar
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A small, child-friendly learning app for closing one learning gap at a time. The current topic teaches children how to identify clock hands and read an analog clock through a guided lesson and focused practice.
 
-Currently, two official plugins are available:
+## Current learning flow
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Learn the short hour hand and long minute hand.
+- Connect clock numbers to hours and five-minute intervals.
+- Practise whole hours, half hours, and five-minute times.
+- Receive a hint and retry before the answer is revealed.
 
-## React Compiler
+English and Bahasa Melayu terms are introduced together where useful.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Run locally
 
-## Expanding the Oxlint configuration
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Quality checks
+
+```bash
+npm run lint
+npm run build
+```
+
+## Direction
+
+The next product milestone is a reusable skill and mastery model so the app can diagnose a child's smallest gap, teach it, verify understanding, and later support topics such as fractions without rebuilding the learning flow.

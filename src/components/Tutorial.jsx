@@ -7,6 +7,7 @@ const STEPS = [
     target: 'hour',
     prompt: 'Tap the SHORT hand! 👆',
     hint: 'The short one is the little guy!',
+    explain: 'The short hand tells us the hour (jam)!',
     clock: { hour: 7, minute: 20 },
   },
   {
@@ -21,6 +22,7 @@ const STEPS = [
     target: 'minute',
     prompt: 'Now tap the LONG hand! 👆',
     hint: 'The long one stretches far out!',
+    explain: 'The long hand tells us the minutes (minit)!',
     clock: { hour: 4, minute: 50 },
   },
   {
@@ -53,19 +55,22 @@ const STEPS = [
 
 function Tutorial({ onStart, onBack }) {
   const [step, setStep] = useState(0)
-  const [wrong, setWrong] = useState(false)
+  const [tapWrong, setTapWrong] = useState(false)
+  const [wrongChoice, setWrongChoice] = useState(null)
   const [solved, setSolved] = useState(false)
 
   const current = STEPS[step]
 
   function succeed() {
     setSolved(true)
-    setWrong(false)
+    setTapWrong(false)
+    setWrongChoice(null)
   }
 
   function next() {
     setSolved(false)
-    setWrong(false)
+    setTapWrong(false)
+    setWrongChoice(null)
     setStep((s) => s + 1)
   }
 
@@ -74,11 +79,12 @@ function Tutorial({ onStart, onBack }) {
     if (index === current.answer) {
       succeed()
     } else {
-      setWrong(true)
+      setWrongChoice(index)
     }
   }
 
   const isLast = step === STEPS.length - 1
+  const madeMistake = tapWrong || wrongChoice !== null
 
   return (
     <section className="card">
@@ -91,10 +97,17 @@ function Tutorial({ onStart, onBack }) {
         </div>
       </div>
 
-      <div className="progress-track">
+      <div
+        className="progress-track"
+        role="progressbar"
+        aria-label="Lesson progress"
+        aria-valuemin="1"
+        aria-valuemax={STEPS.length}
+        aria-valuenow={step + 1}
+      >
         <div
           className="progress-fill"
-          style={{ width: `${(step / STEPS.length) * 100}%` }}
+          style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
         />
       </div>
 
@@ -109,12 +122,12 @@ function Tutorial({ onStart, onBack }) {
               onHourClick={
                 current.target === 'hour'
                   ? () => succeed()
-                  : () => setWrong(true)
+                  : () => setTapWrong(true)
               }
               onMinuteClick={
                 current.target === 'minute'
                   ? () => succeed()
-                  : () => setWrong(true)
+                  : () => setTapWrong(true)
               }
               reveal={solved ? current.target : null}
             />
@@ -139,7 +152,7 @@ function Tutorial({ onStart, onBack }) {
                 className={
                   'choice-btn' +
                   (solved && index === current.answer ? ' correct' : '') +
-                  (wrong && index !== current.answer ? ' wrong' : '')
+                  (wrongChoice === index ? ' wrong' : '')
                 }
                 disabled={solved}
                 onClick={() => handleQuizPick(index)}
@@ -151,10 +164,15 @@ function Tutorial({ onStart, onBack }) {
         </>
       )}
 
-      <p id="feedback" className={wrong ? 'bad' : solved ? 'good' : ''}>
+      <p
+        id="feedback"
+        role="status"
+        aria-live="polite"
+        className={madeMistake ? 'bad' : solved ? 'good' : ''}
+      >
         {solved
           ? `✅ Correct! ${current.explain}`
-          : wrong
+          : madeMistake
             ? 'Oops, try again! 💪'
             : ''}
       </p>

@@ -1,8 +1,32 @@
+function handleKeyActivate(event, handler) {
+  if (handler && (event.key === 'Enter' || event.key === ' ')) {
+    event.preventDefault()
+    handler()
+  }
+}
+
 function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
   const minuteAngle = minute * 6
   const hourAngle = (hour % 12) * 30 + minute * 0.5
 
   const numbers = []
+  const minuteTicks = []
+  for (let i = 0; i < 60; i++) {
+    const isFiveMinuteMark = i % 5 === 0
+    minuteTicks.push(
+      <line
+        key={`tick-${i}`}
+        x1="100"
+        y1={isFiveMinuteMark ? '14' : '10'}
+        x2="100"
+        y2="17"
+        stroke={isFiveMinuteMark ? '#4a69bd' : '#b8c7dc'}
+        strokeWidth={isFiveMinuteMark ? '2' : '1'}
+        transform={`rotate(${i * 6} 100 100)`}
+      />,
+    )
+  }
+
   for (let i = 1; i <= 12; i++) {
     const angle = i * 30 * (Math.PI / 180)
     const r = 74
@@ -19,15 +43,24 @@ function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
     )
   }
 
-  const hourColor = reveal === 'hour' ? '#00b894' : '#2d3436'
-  const minuteColor = reveal === 'minute' ? '#00b894' : '#e17055'
+  const formattedMinute = String(minute).padStart(2, '0')
 
   return (
-    <svg viewBox="0 0 200 200" role="img" aria-label={`Clock showing ${hour}:${minute}`}>
+    <svg
+      viewBox="0 0 200 200"
+      role="img"
+      aria-label={`Clock showing ${hour}:${formattedMinute}`}
+    >
       <circle cx="100" cy="100" r="95" fill="#ffffff" stroke="#4a69bd" strokeWidth="8" />
+      {minuteTicks}
       {numbers}
       <g
+        className="clock-hand-control"
         onClick={onHourClick}
+        onKeyDown={(event) => handleKeyActivate(event, onHourClick)}
+        role={onHourClick ? 'button' : undefined}
+        tabIndex={onHourClick ? 0 : undefined}
+        aria-label={onHourClick ? 'Short hour hand' : undefined}
         style={{ cursor: onHourClick ? 'pointer' : 'default' }}
       >
         <line
@@ -44,15 +77,20 @@ function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
           y1="100"
           x2="100"
           y2="52"
-          stroke={hourColor}
+          stroke="#2d3436"
           strokeWidth="7"
           strokeLinecap="round"
-          className={reveal === 'hour' ? 'hand-reveal' : ''}
+          className={`clock-hand-visible${reveal === 'hour' ? ' hand-reveal' : ''}`}
           transform={`rotate(${hourAngle} 100 100)`}
         />
       </g>
       <g
+        className="clock-hand-control"
         onClick={onMinuteClick}
+        onKeyDown={(event) => handleKeyActivate(event, onMinuteClick)}
+        role={onMinuteClick ? 'button' : undefined}
+        tabIndex={onMinuteClick ? 0 : undefined}
+        aria-label={onMinuteClick ? 'Long minute hand' : undefined}
         style={{ cursor: onMinuteClick ? 'pointer' : 'default' }}
       >
         <line
@@ -69,10 +107,10 @@ function Clock({ hour, minute, onHourClick, onMinuteClick, reveal }) {
           y1="100"
           x2="100"
           y2="32"
-          stroke={minuteColor}
+          stroke="#e17055"
           strokeWidth="5"
           strokeLinecap="round"
-          className={reveal === 'minute' ? 'hand-reveal' : ''}
+          className={`clock-hand-visible${reveal === 'minute' ? ' hand-reveal' : ''}`}
           transform={`rotate(${minuteAngle} 100 100)`}
         />
       </g>

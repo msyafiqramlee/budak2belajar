@@ -2,23 +2,21 @@ import { useState } from 'react'
 import Clock from './Clock.jsx'
 
 const CHEER = ['Awesome! 🎉', 'Great job! ⭐', 'You got it! 🥳', 'Super! 🚀']
-const ENCOURAGE = ["Almost! It's", 'Try again — it was', 'So close! It was']
 
-// Mix of all difficulties, weighted so kids get mostly friendly times
+function wrapHour(hour) {
+  return ((hour - 1 + 12) % 12) + 1
+}
+
+// Keep this first practice set readable from the five-minute marks on the face.
 function randomTime() {
   const hour = 1 + Math.floor(Math.random() * 12)
   const roll = Math.random()
-  let minute
-  if (roll < 0.4) {
-    // o'clock or half past
-    minute = Math.random() < 0.5 ? 0 : 30
-  } else if (roll < 0.75) {
-    // 5-minute steps
-    minute = Math.floor(Math.random() * 12) * 5
-  } else {
-    // any minute
-    minute = Math.floor(Math.random() * 60)
-  }
+  const minute =
+    roll < 0.5
+      ? Math.random() < 0.5
+        ? 0
+        : 30
+      : Math.floor(Math.random() * 12) * 5
   return { hour, minute }
 }
 
@@ -28,21 +26,43 @@ function formatTime({ hour, minute }) {
 }
 
 function buildChoices(answer) {
-  const set = new Set([formatTime(answer)])
-  while (set.size < 4) {
-    const wrong = randomTime()
-    const key = formatTime(wrong)
-    if (wrong.hour !== answer.hour || wrong.minute !== answer.minute) {
-      set.add(key)
-    }
+  const handNumber = answer.minute === 0 ? 12 : answer.minute / 5
+  const candidates = [
+    answer,
+    { hour: wrapHour(answer.hour + 1), minute: answer.minute },
+    { hour: answer.hour, minute: handNumber },
+    { hour: answer.hour, minute: (answer.minute + 15) % 60 },
+    { hour: wrapHour(handNumber), minute: (answer.hour * 5) % 60 },
+  ]
+  const choices = [...new Set(candidates.map(formatTime))].slice(0, 4)
+
+  for (let index = choices.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1))
+    const temporary = choices[index]
+    choices[index] = choices[swapIndex]
+    choices[swapIndex] = temporary
   }
-  return [...set].sort(() => Math.random() - 0.5)
+
+  return choices
+}
+
+function hintFor(question) {
+  if (question.minute === 0) {
+    return 'Hint: the long minute hand on 12 means :00. Try again!'
+  }
+  if (question.minute === 30) {
+    return 'Hint: the long minute hand on 6 means :30. Try again!'
+  }
+  return `Hint: count by 5s to the long hand (${question.minute / 5} × 5). Try again!`
 }
 
 function Quiz({ onBack }) {
   const [question, setQuestion] = useState(() => randomTime())
   const [choices, setChoices] = useState(() => buildChoices(question))
-  const [picked, setPicked] = useState(null)
+  const [wrongChoices, setWrongChoices] = useState([])
+  const [solved, setSolved] = useState(false)
+  const [revealed, setRevealed] = useState(false)
+  const [feedback, setFeedback] = useState('')
   const [score, setScore] = useState(0)
   const [streak, setStreak] = useState(0)
 
@@ -50,25 +70,35 @@ function Quiz({ onBack }) {
     const q = randomTime()
     setQuestion(q)
     setChoices(buildChoices(q))
-    setPicked(null)
+    setWrongChoices([])
+    setSolved(false)
+    setRevealed(false)
+    setFeedback('')
   }
 
   function handlePick(choice) {
-    if (picked) return
-    setPicked(choice)
+    if (solved || revealed || wrongChoices.includes(choice)) return
     const correct = choice === formatTime(question)
     if (correct) {
+      setSolved(true)
+      setFeedback(CHEER[score % CHEER.length])
       setScore((s) => s + 1)
       setStreak((s) => s + 1)
     } else {
+      const nextWrongChoices = [...wrongChoices, choice]
+      setWrongChoices(nextWrongChoices)
       setStreak(0)
+      if (nextWrongChoices.length === 1) {
+        setFeedback(hintFor(question))
+      } else {
+        setRevealed(true)
+        setFeedback(`The answer is ${formatTime(question)}. Let's try another!`)
+      }
     }
   }
 
   const correctAnswer = formatTime(question)
-  const isCorrect = picked === correctAnswer
-  const cheer = CHEER[Math.floor(Math.random() * CHEER.length)]
-  const encourage = ENCOURAGE[Math.floor(Math.random() * ENCOURAGE.length)]
+  const finished = solved || revealed
 
   return (
     <section className="card">
@@ -92,10 +122,10 @@ function Quiz({ onBack }) {
             key={choice}
             className={
               'choice-btn' +
-              (picked && choice === correctAnswer ? ' correct' : '') +
-              (picked === choice && !isCorrect ? ' wrong' : '')
+              (finished && choice === correctAnswer ? ' correct' : '') +
+              (wrongChoices.includes(choice) ? ' wrong' : '')
             }
-            disabled={!!picked}
+            disabled={finished || wrongChoices.includes(choice)}
             onClick={() => handlePick(choice)}
           >
             {choice}
@@ -103,12 +133,16 @@ function Quiz({ onBack }) {
         ))}
       </div>
 
-      <p id="feedback" className={picked ? (isCorrect ? 'good' : 'bad') : ''}>
-        {picked &&
-          (isCorrect ? `${cheer}` : `${encourage} ${correctAnswer} 😊`)}
+      <p
+        id="feedback"
+        role="status"
+        aria-live="polite"
+        className={feedback ? (solved ? 'good' : 'bad') : ''}
+      >
+        {feedback}
       </p>
 
-      {picked && (
+      {finished && (
         <button className="next-btn" onClick={nextQuestion}>
           Next ➡
         </button>
