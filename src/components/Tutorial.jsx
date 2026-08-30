@@ -206,11 +206,10 @@ function Tutorial({ onStart, onBack }) {
 
     return (
       <section className="card session-summary">
-        <span className="eyebrow dark">Guided lesson complete</span>
-        <h2>Your lesson results</h2>
+        <span className="eyebrow dark">Clock quest complete! 🎉</span>
+        <h2>You did it!</h2>
         <p className="summary-intro">
-          You completed all {STEPS.length} steps. First-attempt success shows
-          which ideas already feel confident.
+          You finished all {STEPS.length} clock missions. Look at your stars to see the ideas you already know well.
         </p>
 
         <div className="summary-score-grid">
@@ -249,10 +248,10 @@ function Tutorial({ onStart, onBack }) {
 
         <div className="summary-actions">
           <button className="primary-action" onClick={onStart}>
-            Continue to practice →
+            Keep playing →
           </button>
           <button className="secondary-action bordered" onClick={restartLesson}>
-            Repeat lesson
+            Play it again
           </button>
           <button className="text-action" onClick={onBack}>
             Back to learning path
@@ -269,7 +268,7 @@ function Tutorial({ onStart, onBack }) {
           ⬅ Back
         </button>
         <div className="lesson-position">
-          <span>Part {current.section} of 3 · {current.sectionTitle}</span>
+          <span className="eyebrow dark">Mission {current.section} · {current.sectionTitle}</span>
           <strong>Step {Math.min(step + 1, STEPS.length)} / {STEPS.length}</strong>
         </div>
       </div>
@@ -358,20 +357,20 @@ function Tutorial({ onStart, onBack }) {
         className={madeMistake ? 'bad' : solved ? 'good' : ''}
       >
         {solved
-          ? `✅ Correct! ${current.explain}`
+          ? `🌟 Fantastic! ${current.explain}`
           : madeMistake
-            ? current.tryAgain || 'Look carefully and try again.'
+            ? `Almost there! ${current.tryAgain || 'Look carefully and try again.'}`
             : ''}
       </p>
 
       {solved &&
         (isLast ? (
           <button className="next-btn" onClick={() => setShowSummary(true)}>
-            View lesson results →
+            View my star chart →
           </button>
         ) : (
           <button className="next-btn" onClick={next}>
-            Next lesson ➡
+            Next mission ➡
           </button>
         ))}
     </section>

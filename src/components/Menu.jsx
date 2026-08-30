@@ -3,24 +3,24 @@ function Menu({ onLearn, onPractice }) {
     <section className="dashboard">
       <div className="topic-hero">
         <div className="topic-hero-copy">
-          <span className="eyebrow">Analog time · Foundation</span>
-          <h2>Master the clock, one skill at a time.</h2>
+          <span className="eyebrow">Clock quest · Let’s play</span>
+          <h2>Let’s make friends with the clock!</h2>
           <p>
-            Learn what each hand means, count minute landmarks, read exact
-            ticks, and understand how the hour hand moves.
+            Meet the short hand and the long hand, hop around the minute marks,
+            and learn to read the time with confidence.
           </p>
           <div className="hero-actions">
             <button className="primary-action" onClick={onLearn}>
-              Start guided lesson <span aria-hidden="true">→</span>
+              Start the clock quest <span aria-hidden="true">→</span>
             </button>
             <button className="secondary-action" onClick={onPractice}>
-              Practise now
+              Play a quick round
             </button>
           </div>
           <div className="topic-facts" aria-label="Topic details">
-            <span><strong>10</strong> guided steps</span>
-            <span><strong>3 parts</strong> clear progression</span>
-            <span><strong>EN + BM</strong> key terms</span>
+            <span><strong>10</strong> fun steps</span>
+            <span><strong>3</strong> mini missions</span>
+            <span><strong>EN + BM</strong> key words</span>
           </div>
         </div>
 
@@ -41,10 +41,10 @@ function Menu({ onLearn, onPractice }) {
         <section className="path-card">
           <div className="section-heading">
             <div>
-              <span className="eyebrow dark">Your learning path</span>
-              <h3>Build the skill in order</h3>
+              <span className="eyebrow dark">Your adventure map</span>
+              <h3>Follow the little steps</h3>
             </div>
-            <button className="text-action" onClick={onLearn}>Begin lesson →</button>
+            <button className="text-action" onClick={onLearn}>Start the adventure →</button>
           </div>
 
           <ol className="skill-path">
@@ -52,7 +52,7 @@ function Menu({ onLearn, onPractice }) {
               <span className="skill-number">01</span>
               <span className="skill-copy">
                 <strong>Hands and whole hours</strong>
-                <small>Know which hand shows hours, minutes, and :00.</small>
+                <small>Meet the clock hands and find the hour.</small>
               </span>
               <span className="skill-tag">Start here</span>
             </li>
@@ -60,33 +60,33 @@ function Menu({ onLearn, onPractice }) {
               <span className="skill-number">02</span>
               <span className="skill-copy">
                 <strong>Minutes by five</strong>
-                <small>Connect numbered stops to 05, 10, 15 and beyond.</small>
+                <small>Make five-minute jumps around the clock.</small>
               </span>
             </li>
             <li>
               <span className="skill-number">03</span>
               <span className="skill-copy">
                 <strong>Exact minute ticks</strong>
-                <small>Count forward from a five-minute landmark.</small>
+                <small>Count every tiny tick, one minute at a time.</small>
               </span>
             </li>
             <li>
               <span className="skill-number">04</span>
               <span className="skill-copy">
                 <strong>The moving hour hand</strong>
-                <small>Read the hour already passed as the hand moves forward.</small>
+                <small>Spot the hour the short hand has passed.</small>
               </span>
             </li>
           </ol>
         </section>
 
         <aside className="practice-card">
-          <span className="practice-icon" aria-hidden="true">◎</span>
-          <span className="eyebrow dark">Quick practice</span>
-          <h3>Ready to test yourself?</h3>
-          <p>Choose foundation, five-minute, or exact-minute questions at any time.</p>
+          <span className="practice-icon" aria-hidden="true">★</span>
+          <span className="eyebrow dark">Quick game</span>
+          <h3>Ready for a little challenge?</h3>
+          <p>Pick a level, read the clocks, and collect a streak of happy answers.</p>
           <button className="secondary-action full-width" onClick={onPractice}>
-            Open practice
+            Play the clock game
           </button>
         </aside>
       </div>

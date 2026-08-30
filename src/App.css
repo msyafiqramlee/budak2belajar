@@ -38,6 +38,9 @@
   --violet-soft: #f1e9ff;
   --red: #e5484d;
   --red-soft: #fee7e7;
+  --yellow: #ffe066;
+  --green: #65d6a2;
+  --purple: #a78bfa;
 
   /* Per-topic accent (overridden by .topic-* classes) */
   --topic-accent: var(--primary);
@@ -498,6 +501,28 @@ button {
   z-index: 2;
 }
 
+.topic-hero-copy::before {
+  content: "✦";
+  position: absolute;
+  top: -28px;
+  right: 9%;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 1.4rem;
+  transform: rotate(14deg);
+}
+
+.topic-hero-copy::after {
+  content: "•  •  •";
+  position: absolute;
+  top: 42px;
+  right: -4px;
+  color: var(--amber);
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  transform: rotate(-10deg);
+}
+
 .eyebrow {
   display: inline-block;
   padding: 5px 12px;
@@ -767,12 +792,25 @@ button {
 }
 
 .skill-path li {
+  position: relative;
   min-height: 64px;
   display: flex;
   align-items: center;
   gap: 14px;
   padding: 12px 0;
   border-top: 2px dashed rgba(50, 42, 94, 0.09);
+}
+
+.skill-path li:not(:last-child)::after {
+  content: "↓";
+  position: absolute;
+  left: 17px;
+  bottom: -11px;
+  z-index: 2;
+  color: var(--topic-accent);
+  font-size: 0.86rem;
+  font-weight: 900;
+  background: var(--surface);
 }
 
 .skill-number {
@@ -843,6 +881,16 @@ button {
   border-radius: 15px;
   background: var(--amber-soft);
   animation: float-clock 5s ease-in-out infinite;
+}
+
+.practice-icon::after {
+  content: "";
+  display: block;
+  animation: twinkle 1.7s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  50% { transform: rotate(20deg) scale(1.18); }
 }
 
 .practice-card p {
@@ -1295,6 +1343,12 @@ button {
   background: var(--topic-accent-soft);
 }
 
+.result-number::before {
+  content: "★";
+  margin-right: 2px;
+  font-size: 0.58rem;
+}
+
 .result-question,
 .answer-detail {
   min-width: 0;
@@ -1441,13 +1495,22 @@ button {
 #feedback {
   min-height: 2em;
   margin-top: 16px;
+  padding: 8px 12px;
   text-align: center;
   font-size: 0.94rem;
   font-weight: 800;
+  border-radius: 12px;
 }
 
-#feedback.good { color: var(--mint-deep); }
-#feedback.bad { color: var(--coral-deep); }
+#feedback.good {
+  color: var(--mint-deep);
+  background: var(--mint-soft);
+}
+
+#feedback.bad {
+  color: var(--coral-deep);
+  background: var(--coral-soft);
+}
 
 .next-btn {
   min-height: 50px;

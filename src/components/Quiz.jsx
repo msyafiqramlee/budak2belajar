@@ -7,24 +7,24 @@ const SESSION_LENGTH = 10
 const PRACTICE_LEVELS = [
   {
     id: 'foundation',
-    name: 'Foundation',
-    bm: 'Asas',
-    description: "Whole hours and half hours",
-    detail: 'A clear starting point for new learners.',
+    name: 'Super easy start',
+    bm: 'Mula mudah',
+    description: 'Whole hours and half hours',
+    detail: 'A friendly first level to warm up your clock brain.',
   },
   {
     id: 'five-minute',
-    name: 'Five-minute times',
-    bm: '5 minit',
+    name: 'Five-minute hops',
+    bm: 'Lompat 5 minit',
     description: 'Count around the clock by fives',
-    detail: 'Build fluency with numbered minute landmarks.',
+    detail: 'Make happy little jumps between the big numbers.',
   },
   {
     id: 'exact',
-    name: 'Exact minutes',
-    bm: 'Minit tepat',
+    name: 'Minute detective',
+    bm: 'Detektif minit',
     description: 'Read every individual minute tick',
-    detail: 'Challenge yourself with times such as 3:19 and 8:33.',
+    detail: 'A super challenge for curious clock detectives.',
   },
 ]
 
@@ -155,10 +155,10 @@ function Quiz({ onBack }) {
             ← Menu
           </button>
         </div>
-        <span className="eyebrow dark">Choose your challenge</span>
-        <h2 className="practice-select-title">How would you like to practise?</h2>
+        <span className="eyebrow dark">Pick a game</span>
+        <h2 className="practice-select-title">Which clock game sounds fun?</h2>
         <p className="practice-select-intro">
-          Start where the clock feels comfortable. You can change levels at any time.
+          Choose a level, then read the clock and tap your answer. You can try again whenever you need.
         </p>
         <div className="practice-levels">
           {PRACTICE_LEVELS.map((practiceLevel, index) => (
@@ -190,7 +190,7 @@ function Quiz({ onBack }) {
       setFeedback(
         correctFirstTry
           ? CHEER[score % CHEER.length]
-          : 'Correct after using the hint. Keep practising this pattern.',
+          : 'Correct after using the hint. Keep going — your brain is learning!',
       )
       setHistory((currentHistory) => [
         ...currentHistory,
@@ -210,7 +210,7 @@ function Quiz({ onBack }) {
       setWrongChoices(nextWrongChoices)
       setStreak(0)
       if (nextWrongChoices.length === 1) {
-        setFeedback(hintFor(question))
+        setFeedback(`Not quite yet — ${hintFor(question)}`)
       } else {
         setRevealed(true)
         setFeedback(`The answer is ${formatTime(question)}. Let's try another!`)
@@ -244,11 +244,10 @@ function Quiz({ onBack }) {
 
     return (
       <section className="card session-summary practice-summary">
-        <span className="eyebrow dark">{levelInfo.name} complete</span>
-        <h2>Your practice results</h2>
+        <span className="eyebrow dark">{levelInfo.name} finished! 🎉</span>
+        <h2>Look at you go!</h2>
         <p className="summary-intro">
-          You answered {SESSION_LENGTH} clock questions. Review your first
-          answers to see which patterns need another look.
+          You played all {SESSION_LENGTH} clock questions. See your stars, then choose what you’d like to play next.
         </p>
 
         <div className="summary-score-grid">
@@ -357,7 +356,7 @@ function Quiz({ onBack }) {
 
       {finished && (
         <button className="next-btn" onClick={nextQuestion}>
-          {history.length >= SESSION_LENGTH ? 'View results →' : 'Next →'}
+          {history.length >= SESSION_LENGTH ? 'See my stars →' : 'Next clock →'}
         </button>
       )}
     </section>

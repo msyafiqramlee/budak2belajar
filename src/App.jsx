@@ -29,16 +29,16 @@ function App() {
     <div className="app-shell">
       <button className={`sidebar-overlay${sidebarOpen ? ' visible' : ''}`} aria-label="Close navigation" onClick={() => setSidebarOpen(false)} />
       <aside className={`sidebar${sidebarOpen ? ' open' : ''}`}>
-        <div className="brand"><span className="brand-mark" aria-hidden="true"><span className="brand-hand brand-hand-hour" /><span className="brand-hand brand-hand-minute" /></span><span><strong>Budak2Belajar</strong><small>Build strong foundations</small></span></div>
+        <div className="brand"><span className="brand-mark" aria-hidden="true"><span className="brand-hand brand-hand-hour" /><span className="brand-hand brand-hand-minute" /></span><span><strong>Budak2Belajar</strong><small>Learn, play, grow!</small></span></div>
         <nav className="sidebar-nav" aria-label="Learning topics">
-          <p className="nav-label">Learning areas</p>
+          <p className="nav-label">Pick an adventure</p>
           {Object.entries(TOPICS).map(([id, item]) => <button key={id} className={`nav-item${topic === id ? ' active' : ''}`} aria-current={topic === id ? 'page' : undefined} onClick={() => navigateTopic(id)}><span className={`nav-icon${id === 'fractions' ? ' fraction-icon' : ''}`} aria-hidden="true">{item.icon}</span><span className="nav-copy"><strong>{item.label}</strong><small>{id === 'clock' ? 'Time and minute intervals' : id === 'operations' ? 'Add, subtract, multiply, divide' : 'Parts, compare and calculate'}</small></span></button>)}
         </nav>
-        <div className="sidebar-note"><span className="sidebar-note-icon" aria-hidden="true">✓</span><p><strong>Small gaps matter.</strong> Learn one clear skill at a time.</p></div>
+        <div className="sidebar-note"><span className="sidebar-note-icon" aria-hidden="true">★</span><p><strong>Every try counts!</strong> Little steps help your brain grow.</p></div>
       </aside>
       <div className={`app-content topic-${topic}`}>
-        <header className="mobile-header"><button className="mobile-menu-btn" aria-label="Open navigation" onClick={() => setSidebarOpen(true)}><span /><span /><span /></button><div className="mobile-brand"><span className="brand-mark small" aria-hidden="true"><span className="brand-hand brand-hand-hour" /><span className="brand-hand brand-hand-minute" /></span><strong>Budak2Belajar</strong></div></header>
-        <div className="page-header"><div><p className="breadcrumb">Learning / {current.label}</p><h1>{pageTitle}</h1></div><span className="topic-status"><span /> Active topic</span></div>
+        <header className="mobile-header"><button className="mobile-menu-btn" aria-label="Open navigation" onClick={() => setSidebarOpen(true)}><span /><span /><span /></button><div className="mobile-brand"><span className="brand-mark small" aria-hidden="true"><span className="brand-hand brand-hand-hour" /><span className="brand-hand brand-hand-minute" /></span><strong>Budak2Belajar</strong><small>Learn, play, grow!</small></div></header>
+        <div className="page-header"><div><p className="breadcrumb">Learning / {current.label}</p><h1>{pageTitle}</h1></div><span className="topic-status"><span /> You’ve got this!</span></div>
         <main className="workspace">
           {topic === 'clock' && view === 'menu' && <Menu onLearn={() => navigate('learn')} onPractice={() => navigate('quiz')} />}
           {topic === 'clock' && view === 'learn' && <Tutorial onStart={() => navigate('quiz')} onBack={() => navigate('menu')} />}
