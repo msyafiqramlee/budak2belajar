@@ -46,11 +46,11 @@ function App() {
   useEffect(() => {
     localStorage.setItem('budak2belajar-progress', JSON.stringify(progress))
   }, [progress])
-  function navigate(nextView) { setView(nextView); setSidebarOpen(false) }
+  function navigate(nextView) { setView(plan === 'kangaroo' && nextView === 'quiz' ? 'menu' : nextView); setSidebarOpen(false) }
   function navigateTopic(nextTopic) { setTopic(nextTopic); setView('menu'); setSelectedModule(null); setSidebarOpen(false) }
   function navigatePlan(nextPlan) { setPlan(nextPlan); navigateTopic(PLAN_START_TOPIC[nextPlan]) }
   function openModule(module) {
-    const minutes = plan === 'kangaroo' ? KANGAROO_LEVELS[topic].minutes : undefined
+    const minutes = plan === 'kangaroo' ? KANGAROO_LEVELS[topic]?.minutes : undefined
     setSelectedModule(minutes ? { ...module, minutes } : module)
     navigate('learn')
   }

@@ -49,15 +49,15 @@ export const TOPIC_SKILLS = {
   ...KANGAROO_SKILLS,
 }
 
-export function getStatusCounts(topic) {
-  return TOPIC_SKILLS[topic].reduce((counts, skill) => {
+export function getStatusCounts(skills) {
+  return skills.reduce((counts, skill) => {
     counts[skill.status] += 1
     return counts
   }, { New: 0, Practising: 0, Mastered: 0 })
 }
 
-export function getNextSkill(topic) {
-  return TOPIC_SKILLS[topic].find((skill) => skill.status !== 'Mastered') || TOPIC_SKILLS[topic][0]
+export function getNextSkill(skills) {
+  return skills.find((skill) => skill.status !== 'Mastered') || skills[0]
 }
 
 export { SKILL_STATUSES }

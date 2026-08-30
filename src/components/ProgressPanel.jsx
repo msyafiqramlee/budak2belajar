@@ -1,4 +1,4 @@
-import { TOPIC_SKILLS } from '../content/syllabus.js'
+import { TOPIC_SKILLS, getStatusCounts, getNextSkill } from '../content/syllabus.js'
 
 function StatusPill({ status }) {
   return <span className={`skill-status status-${status.toLowerCase()}`}>{status}</span>
@@ -10,11 +10,8 @@ export default function ProgressPanel({ topic, progress = {} }) {
     ...skill,
     status: progress[skill.id] || skill.status,
   }))
-  const counts = resolvedSkills.reduce((summary, skill) => {
-    summary[skill.status] += 1
-    return summary
-  }, { New: 0, Practising: 0, Mastered: 0 })
-  const nextSkill = resolvedSkills.find((skill) => skill.status !== 'Mastered') || resolvedSkills[0]
+  const counts = getStatusCounts(resolvedSkills)
+  const nextSkill = getNextSkill(resolvedSkills)
   const mastered = counts.Mastered
   const percent = Math.round((mastered / resolvedSkills.length) * 100)
 
