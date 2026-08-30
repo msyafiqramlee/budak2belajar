@@ -36,7 +36,7 @@ function App() {
         </nav>
         <div className="sidebar-note"><span className="sidebar-note-icon" aria-hidden="true">✓</span><p><strong>Small gaps matter.</strong> Learn one clear skill at a time.</p></div>
       </aside>
-      <div className="app-content">
+      <div className={`app-content topic-${topic}`}>
         <header className="mobile-header"><button className="mobile-menu-btn" aria-label="Open navigation" onClick={() => setSidebarOpen(true)}><span /><span /><span /></button><div className="mobile-brand"><span className="brand-mark small" aria-hidden="true"><span className="brand-hand brand-hand-hour" /><span className="brand-hand brand-hand-minute" /></span><strong>Budak2Belajar</strong></div></header>
         <div className="page-header"><div><p className="breadcrumb">Learning / {current.label}</p><h1>{pageTitle}</h1></div><span className="topic-status"><span /> Active topic</span></div>
         <main className="workspace">

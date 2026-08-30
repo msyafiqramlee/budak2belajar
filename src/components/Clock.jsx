@@ -38,10 +38,10 @@ function Clock({
         y2="17"
         stroke={
           isHighlighted
-            ? '#e76f51'
+            ? '#e8503c'
             : isFiveMinuteMark
-              ? '#2563eb'
-              : '#cbd5e1'
+              ? '#ffb020'
+              : '#e6e1f7'
         }
         strokeWidth={isHighlighted ? '3' : isFiveMinuteMark ? '2' : '1'}
         transform={`rotate(${i * 6} 100 100)`}
@@ -92,7 +92,7 @@ function Clock({
       role="img"
       aria-label={`Clock showing ${hour}:${formattedMinute}`}
     >
-      <circle cx="100" cy="100" r="95" fill="#ffffff" stroke="#2563eb" strokeWidth="8" />
+      <circle cx="100" cy="100" r="95" fill="#ffffff" stroke="#6c5ce7" strokeWidth="8" />
       {minuteTicks}
       {minuteLabels}
       {numbers}
@@ -119,7 +119,7 @@ function Clock({
           y1="100"
           x2="100"
           y2="52"
-          stroke="#17263c"
+          stroke="#322a5e"
           strokeWidth="7"
           strokeLinecap="round"
           className={`clock-hand-visible${reveal === 'hour' ? ' hand-reveal' : ''}`}
@@ -149,14 +149,14 @@ function Clock({
           y1="100"
           x2="100"
           y2="32"
-          stroke="#e76f51"
+          stroke="#ff6b57"
           strokeWidth="5"
           strokeLinecap="round"
           className={`clock-hand-visible${reveal === 'minute' ? ' hand-reveal' : ''}`}
           transform={`rotate(${minuteAngle} 100 100)`}
         />
       </g>
-      <circle cx="100" cy="100" r="6" fill="#17263c" />
+      <circle cx="100" cy="100" r="6" fill="#322a5e" />
     </svg>
   )
 }
