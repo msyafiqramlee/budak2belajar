@@ -1114,6 +1114,48 @@ button {
   }
 }
 
+/* ============================================================
+   Clock translation activity
+   ============================================================ */
+
+.translation-card {
+  max-width: 760px;
+}
+
+.translation-route {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 4px auto 18px;
+  color: var(--ink-faint);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.translation-route span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(50, 42, 94, 0.06);
+}
+
+.translation-route span.active {
+  color: var(--topic-accent-deep);
+  background: var(--topic-accent-soft);
+}
+
+.translation-choices .choice-btn {
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 430px) {
+  .translation-route {
+    gap: 6px;
+    font-size: 0.7rem;
+  }
+}
+
 .card {
   width: min(720px, 100%);
   margin: 0 auto;

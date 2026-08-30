@@ -5,6 +5,7 @@ export const TOPIC_SKILLS = {
     { id: 'clock-hands', title: 'Meet the clock hands', year: 'Year 1', status: 'Practising', description: 'Tell the short hour hand from the long minute hand.' },
     { id: 'clock-hours', title: 'O’clock and half past', year: 'Year 1', status: 'New', description: 'Read whole hours and half hours with confidence.' },
     { id: 'clock-quarter', title: 'Quarter past and quarter to', year: 'Year 2', status: 'New', description: 'Recognise :15 and :45 as quarter-hour landmarks.' },
+    { id: 'clock-translation', title: 'Analog ↔ digital time', year: 'Year 2', status: 'New', description: 'Translate clock pictures into digital times and back again.' },
     { id: 'clock-five', title: 'Five-minute hops', year: 'Year 2', status: 'New', description: 'Count around the clock in five-minute jumps.' },
     { id: 'clock-exact', title: 'Exact minute detective', year: 'Year 2', status: 'New', description: 'Count the small ticks to read any minute.' },
     { id: 'clock-elapsed', title: 'Time journeys', year: 'Year 3', status: 'New', description: 'Compare times and work out simple durations.' },

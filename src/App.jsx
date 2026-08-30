@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Menu from './components/Menu.jsx'
-import Tutorial from './components/Tutorial.jsx'
+import Tutorial, { TranslationQuiz } from './components/Tutorial.jsx'
 import Quiz from './components/Quiz.jsx'
 import TopicMenu from './components/TopicMenu.jsx'
 import ModuleLesson, { MixedModuleLesson } from './components/ModuleLesson.jsx'
@@ -62,8 +62,9 @@ function App() {
         <header className="mobile-header"><button className="mobile-menu-btn" aria-label="Open navigation" onClick={() => setSidebarOpen(true)}><span /><span /><span /></button><div className="mobile-brand"><span className="brand-mark small" aria-hidden="true"><span className="brand-hand brand-hand-hour" /><span className="brand-hand brand-hand-minute" /></span><strong>Budak2Belajar</strong><small>Learn, play, grow!</small></div></header>
         <div className="page-header"><div><p className="breadcrumb">Learning / {current.label}</p><h1>{pageTitle}</h1></div><span className="topic-status"><span /> You’ve got this!</span></div>
         <main className="workspace">
-          {topic === 'clock' && view === 'menu' && <Menu onLearn={() => navigate('learn')} onPractice={() => navigate('quiz')} />}
-          {topic === 'clock' && view === 'learn' && <Tutorial onStart={() => navigate('quiz')} onBack={() => navigate('menu')} onProgress={markProgress} />}
+          {topic === 'clock' && view === 'menu' && <Menu onLearn={() => navigate('learn')} onPractice={() => navigate('quiz')} onTranslation={() => navigate('translation')} />}
+          {topic === 'clock' && view === 'learn' && <Tutorial onStart={() => navigate('quiz')} onBack={() => navigate('menu')} onTranslation={() => navigate('translation')} onProgress={markProgress} />}
+          {topic === 'clock' && view === 'translation' && <TranslationQuiz onBack={() => navigate('menu')} />}
           {topic === 'clock' && view === 'quiz' && <Quiz onBack={() => navigate('menu')} />}
           {topic === 'operations' && view === 'menu' && <TopicMenu type="operations" title="Number operations" subtitle="Master the four calculations that support fractions, measurement, money, and later mathematics." modules={OPERATION_MODULES} onSelect={openModule} onPractice={() => navigate('quiz')} />}
           {topic === 'fractions' && view === 'menu' && <TopicMenu type="fractions" title="Fractions" subtitle="Move from equal parts and fraction language to comparing and calculating with fractions." modules={FRACTION_MODULES} onSelect={openModule} onPractice={() => navigate('quiz')} onPrerequisite={() => navigateTopic('operations')} />}

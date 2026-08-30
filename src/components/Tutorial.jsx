@@ -1,6 +1,51 @@
 import { useState } from 'react'
 import Clock from './Clock.jsx'
 
+const TRANSLATION_STEPS = [
+  {
+    direction: 'Analog → Digital',
+    type: 'read',
+    prompt: 'Look at the clock. Which digital time matches it?',
+    clock: { hour: 3, minute: 19 },
+    options: ['3:19', '3:15', '4:19', '9:03'],
+    answer: 0,
+    explain: 'The short hand has passed 3. The long hand is 4 ticks after 15, so it is 3:19.',
+    hint: 'Read the hour first. Then count from the nearest five-minute landmark: 15 + 4.',
+  },
+  {
+    direction: 'Analog → Digital',
+    type: 'read',
+    prompt: 'Which digital time matches this clock?',
+    clock: { hour: 6, minute: 23 },
+    options: ['6:23', '6:20', '7:23', '3:26'],
+    answer: 0,
+    explain: 'The hour is 6. The long hand is 3 ticks after 20, making 23 minutes.',
+    hint: 'The long hand is on 4, which means 20, then count 3 tiny ticks.',
+  },
+  {
+    direction: 'Digital → Analog',
+    type: 'choose',
+    prompt: 'Which clock shows 4:39?',
+    clock: { hour: 4, minute: 39 },
+    options: ['Short hand past 4; long hand 4 ticks after 7', 'Short hand on 5; long hand on 4', 'Short hand past 3; long hand on 8', 'Short hand on 4; long hand on 9'],
+    answer: 0,
+    explain: 'At 4:39, the short hand has passed 4 and the long hand is 4 ticks after 35.',
+    hint: 'Find 39: start at 35 on number 7, then count four tiny ticks.',
+  },
+  {
+    direction: 'Digital → Analog',
+    type: 'choose',
+    prompt: 'Where should the long hand point for 2:45?',
+    clock: { hour: 2, minute: 45 },
+    options: ['9', '3', '6', '12'],
+    answer: 0,
+    explain: 'Forty-five minutes is three-quarters around the clock, at number 9.',
+    hint: 'Count by fives: 5, 10, 15… 45 lands on 9.',
+  },
+]
+
+const TRANSLATION_CHEERS = ['Great translating!', 'You read both clock languages!', 'That clock-to-digital match is spot on!']
+
 const STEPS = [
   {
     section: 1,
@@ -176,7 +221,62 @@ const STEPS = [
   },
 ]
 
-function Tutorial({ onStart, onBack, onProgress }) {
+export function TranslationQuiz({ onBack }) {
+  const [step, setStep] = useState(0)
+  const [selected, setSelected] = useState(null)
+  const [wrong, setWrong] = useState(false)
+  const current = TRANSLATION_STEPS[step]
+  const solved = selected === current.answer
+
+  function choose(index) {
+    if (solved) return
+    setSelected(index)
+    setWrong(index !== current.answer)
+  }
+
+  function next() {
+    setStep((value) => (value + 1) % TRANSLATION_STEPS.length)
+    setSelected(null)
+    setWrong(false)
+  }
+
+  return (
+    <section className="card translation-card">
+      <div className="hud">
+        <button className="back-btn" onClick={onBack}>⬅ Back</button>
+        <div className="lesson-position">
+          <span className="eyebrow dark">Clock translation</span>
+          <strong>{current.direction}</strong>
+        </div>
+      </div>
+      <div className="translation-route" aria-label="Translation direction">
+        <span className={current.direction === 'Analog → Digital' ? 'active' : ''}>◷ Analog</span>
+        <span>↔</span>
+        <span className={current.direction === 'Digital → Analog' ? 'active' : ''}>Digital time</span>
+      </div>
+      <div className="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax={TRANSLATION_STEPS.length} aria-valuenow={step + 1} aria-label="Translation quiz progress">
+        <div className="progress-fill" style={{ width: `${((step + 1) / TRANSLATION_STEPS.length) * 100}%` }} />
+      </div>
+      <p className="quiz-level-label">Mission {step + 1} of {TRANSLATION_STEPS.length}</p>
+      <h2 className="question">{current.prompt}</h2>
+      <div className="clock-container">
+        <Clock hour={current.clock.hour} minute={current.clock.minute} showMinuteLabels reveal="minute" highlightMinute={current.clock.minute} />
+      </div>
+      {!solved && <p className="hint">{wrong ? `Almost there! ${current.hint}` : current.hint}</p>}
+      <div className="choices single-col translation-choices">
+        {current.options.map((option, index) => (
+          <button key={option} className={`choice-btn ${solved && index === current.answer ? 'correct' : ''} ${wrong && index === selected ? 'wrong' : ''}`} disabled={solved} onClick={() => choose(index)}>{option}</button>
+        ))}
+      </div>
+      <p id="feedback" role="status" aria-live="polite" className={wrong ? 'bad' : solved ? 'good' : ''}>
+        {solved ? `🌟 ${TRANSLATION_CHEERS[step % TRANSLATION_CHEERS.length]} ${current.explain}` : ''}
+      </p>
+      {solved && <button className="next-btn" onClick={next}>{step === TRANSLATION_STEPS.length - 1 ? 'Play again →' : 'Next translation →'}</button>}
+    </section>
+  )
+}
+
+function Tutorial({ onStart, onBack, onTranslation }) {
   const [step, setStep] = useState(0)
   const [tapWrong, setTapWrong] = useState(false)
   const [wrongChoice, setWrongChoice] = useState(null)
@@ -293,6 +393,9 @@ function Tutorial({ onStart, onBack, onProgress }) {
         <div className="summary-actions">
           <button className="primary-action" onClick={onStart}>
             Keep playing →
+          </button>
+          <button className="secondary-action bordered" onClick={onTranslation}>
+            Translate clocks ↔
           </button>
           <button className="secondary-action bordered" onClick={restartLesson}>
             Play it again

@@ -1,4 +1,4 @@
-function Menu({ onLearn, onPractice }) {
+function Menu({ onLearn, onPractice, onTranslation }) {
   return (
     <section className="dashboard">
       <div className="topic-hero">
@@ -15,6 +15,9 @@ function Menu({ onLearn, onPractice }) {
             </button>
             <button className="secondary-action" onClick={onPractice}>
               Play a quick round
+            </button>
+            <button className="secondary-action" onClick={onTranslation}>
+              Translate a clock ↔
             </button>
           </div>
           <div className="topic-facts" aria-label="Topic details">
