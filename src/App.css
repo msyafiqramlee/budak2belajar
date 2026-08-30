@@ -915,9 +915,204 @@ button {
   box-shadow: 0 7px 0 var(--primary-deep);
 }
 
-/* ============================================================
-   Lesson / quiz card
-   ============================================================ */
+.progress-panel {
+  margin-top: 18px;
+  padding: 24px 26px;
+  border: 2px solid rgba(50, 42, 94, 0.1);
+  border-radius: var(--radius-lg);
+  background: #fffdf8;
+  box-shadow: var(--shadow-card);
+}
+
+.progress-panel-heading,
+.status-counts,
+.next-skill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.progress-panel-heading h3 {
+  margin-top: 7px;
+  font-size: 1.2rem;
+}
+
+.mastery-percent {
+  color: var(--topic-accent-deep);
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.mastery-meter {
+  height: 14px;
+  overflow: hidden;
+  margin-top: 18px;
+  border: 2px solid rgba(50, 42, 94, 0.12);
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.mastery-meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--topic-accent), var(--mint));
+  transition: width 350ms ease;
+}
+
+.status-counts {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 13px;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-counts span {
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(50, 42, 94, 0.06);
+}
+
+.status-counts b {
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.next-skill {
+  justify-content: flex-start;
+  margin-top: 18px;
+  padding: 13px 15px;
+  border: 2px dashed var(--topic-accent);
+  border-radius: var(--radius-md);
+  background: var(--topic-accent-soft);
+}
+
+.next-skill-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  flex: 0 0 34px;
+  place-items: center;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 900;
+  border-radius: 10px;
+  background: var(--topic-accent);
+}
+
+.next-skill small,
+.next-skill strong,
+.next-skill p {
+  display: block;
+}
+
+.next-skill small {
+  color: var(--topic-accent-deep);
+  font-size: 0.67rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.next-skill strong {
+  margin-top: 2px;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.next-skill p {
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.skill-map-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 22px;
+  margin-top: 18px;
+  list-style: none;
+}
+
+.skill-map-list li {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-top: 9px;
+  border-top: 2px dashed rgba(50, 42, 94, 0.09);
+}
+
+.map-number {
+  color: var(--ink-faint);
+  font-size: 0.66rem;
+  font-weight: 900;
+}
+
+.map-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.map-copy strong,
+.map-copy small {
+  display: block;
+}
+
+.map-copy strong {
+  overflow: hidden;
+  font-size: 0.77rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-copy small {
+  overflow: hidden;
+  margin-top: 2px;
+  color: var(--ink-faint);
+  font-size: 0.67rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.skill-status {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  font-size: 0.58rem;
+  font-weight: 900;
+  border-radius: 999px;
+}
+
+.status-mastered {
+  color: var(--mint-deep);
+  background: var(--mint-soft);
+}
+
+.status-practising {
+  color: var(--amber-deep);
+  background: var(--amber-soft);
+}
+
+.status-new {
+  color: var(--ink-faint);
+  background: rgba(50, 42, 94, 0.07);
+}
+
+@media (max-width: 720px) {
+  .progress-panel {
+    padding: 20px;
+  }
+
+  .skill-map-list {
+    grid-template-columns: 1fr;
+  }
+}
 
 .card {
   width: min(720px, 100%);
@@ -2060,10 +2255,6 @@ button:focus-visible {
   .card {
     padding: 20px 16px;
     border-radius: 20px;
-  }
-
-  .hud {
-    flex-wrap: wrap;
   }
 
   .quiz-level-label {

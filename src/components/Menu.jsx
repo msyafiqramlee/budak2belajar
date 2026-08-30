@@ -48,33 +48,47 @@ function Menu({ onLearn, onPractice }) {
           </div>
 
           <ol className="skill-path">
-            <li>
+            <li className="skill-path-item mastered">
               <span className="skill-number">01</span>
               <span className="skill-copy">
-                <strong>Hands and whole hours</strong>
-                <small>Meet the clock hands and find the hour.</small>
+                <strong>Meet the clock hands</strong>
+                <small>Tell the short hour hand from the long minute hand.</small>
               </span>
-              <span className="skill-tag">Start here</span>
+              <span className="skill-tag">Practising</span>
             </li>
-            <li>
+            <li className="skill-path-item">
               <span className="skill-number">02</span>
               <span className="skill-copy">
-                <strong>Minutes by five</strong>
-                <small>Make five-minute jumps around the clock.</small>
+                <strong>O’clock and half past</strong>
+                <small>Read whole hours and half hours with confidence.</small>
               </span>
             </li>
-            <li>
+            <li className="skill-path-item">
               <span className="skill-number">03</span>
               <span className="skill-copy">
-                <strong>Exact minute ticks</strong>
-                <small>Count every tiny tick, one minute at a time.</small>
+                <strong>Quarter past and quarter to</strong>
+                <small>Recognise :15 and :45 as special clock landmarks.</small>
               </span>
             </li>
-            <li>
+            <li className="skill-path-item">
               <span className="skill-number">04</span>
               <span className="skill-copy">
-                <strong>The moving hour hand</strong>
-                <small>Spot the hour the short hand has passed.</small>
+                <strong>Five-minute hops</strong>
+                <small>Count around the clock in five-minute jumps.</small>
+              </span>
+            </li>
+            <li className="skill-path-item">
+              <span className="skill-number">05</span>
+              <span className="skill-copy">
+                <strong>Exact minute detective</strong>
+                <small>Count the tiny ticks to read any minute.</small>
+              </span>
+            </li>
+            <li className="skill-path-item">
+              <span className="skill-number">06</span>
+              <span className="skill-copy">
+                <strong>Time journeys</strong>
+                <small>Compare times and work out simple durations.</small>
               </span>
             </li>
           </ol>

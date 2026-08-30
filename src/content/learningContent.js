@@ -1,3 +1,20 @@
+const shuffleChoices = (options, answer) => {
+  const indexed = options.map((option, index) => ({ option, index }))
+  for (let index = indexed.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1))
+    ;[indexed[index], indexed[swapIndex]] = [indexed[swapIndex], indexed[index]]
+  }
+  return {
+    options: indexed.map(({ option }) => option),
+    answer: indexed.findIndex(({ index }) => index === answer),
+  }
+}
+
+export const prepareStep = (step) => {
+  const shuffled = shuffleChoices(step.options, step.answer)
+  return { ...step, ...shuffled }
+}
+
 export const OPERATION_MODULES = [
   {
     id: 'addition',

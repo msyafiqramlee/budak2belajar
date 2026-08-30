@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import LearningVisual from './LearningVisual.jsx'
+import { prepareStep } from '../content/learningContent.js'
 
 function makeMixedModule(title, modules) {
   const steps = []
@@ -11,18 +12,24 @@ function makeMixedModule(title, modules) {
   return { id: 'mixed', title: `Mixed ${title} practice`, bm: 'Latihan campuran', steps }
 }
 
+function nextStatus(results, total) {
+  const completed = results.length
+  if (completed === total && results.filter((result) => result.firstTry).length >= Math.ceil(total * 0.8)) return 'Mastered'
+  return completed ? 'Practising' : 'New'
+}
+
 export function MixedModuleLesson({ title, modules, onBack }) {
   const [module] = useState(() => makeMixedModule(title, modules))
   return <ModuleLesson module={module} onBack={onBack} />
 }
 
-export default function ModuleLesson({ module, onBack }) {
+export default function ModuleLesson({ module, onBack, onProgress }) {
   const [stepIndex, setStepIndex] = useState(0)
   const [selected, setSelected] = useState(null)
   const [attempted, setAttempted] = useState(false)
   const [results, setResults] = useState([])
   const [finished, setFinished] = useState(false)
-  const step = module.steps[stepIndex]
+  const step = useMemo(() => prepareStep(module.steps[stepIndex]), [module, stepIndex])
 
   function choose(optionIndex) {
     if (selected === step.answer) return
@@ -30,7 +37,11 @@ export default function ModuleLesson({ module, onBack }) {
     setSelected(optionIndex)
     setAttempted(true)
     if (optionIndex === step.answer) {
-      setResults((current) => [...current, { prompt: step.prompt, answer: step.options[step.answer], firstTry }])
+      setResults((current) => {
+        const nextResults = [...current, { prompt: step.prompt, answer: step.options[step.answer], firstTry }]
+        if (onProgress && module.id !== 'mixed') onProgress(module.id, nextStatus(nextResults, module.steps.length))
+        return nextResults
+      })
     }
   }
 

@@ -38,6 +38,48 @@ const STEPS = [
   },
   {
     section: 2,
+    sectionTitle: 'Quarter hours and five-minute hops',
+    type: 'quiz',
+    prompt: 'The long hand points to 3. What special time does that show?',
+    options: [':15 — quarter past', ':30 — half past', ':45 — quarter to', ':05 — five past'],
+    answer: 0,
+    explain: 'The long hand on 3 shows 15 minutes, or quarter past.',
+    tryAgain: 'Number 3 is three groups of five: 3 × 5 = 15 minutes.',
+    clock: { hour: 4, minute: 15 },
+    showMinuteLabels: true,
+    reveal: 'minute',
+    visualNote: 'Quarter past means 15 minutes after the hour.',
+  },
+  {
+    section: 2,
+    sectionTitle: 'Quarter hours and five-minute hops',
+    type: 'quiz',
+    prompt: 'The long hand points to 9. What special time does that show?',
+    options: [':45 — quarter to', ':15 — quarter past', ':30 — half past', ':05 — five past'],
+    answer: 0,
+    explain: 'The long hand on 9 shows 45 minutes, or quarter to the next hour.',
+    tryAgain: 'Count by fives to 9: 5, 10, 15, 20, 25, 30, 35, 40, 45.',
+    clock: { hour: 7, minute: 45 },
+    showMinuteLabels: true,
+    reveal: 'minute',
+    visualNote: 'Quarter to means 15 minutes before the next hour.',
+  },
+  {
+    section: 2,
+    sectionTitle: 'Quarter hours and five-minute hops',
+    type: 'quiz',
+    prompt: 'The clock shows 2:10. What happens after 5 more minutes?',
+    options: ['2:15 — quarter past', '2:05', '3:10', '2:20'],
+    answer: 0,
+    explain: 'Five minutes after 2:10 is 2:15, which is quarter past 2.',
+    tryAgain: 'Move forward five minutes: 10, then 15.',
+    clock: { hour: 2, minute: 10 },
+    showMinuteLabels: true,
+    reveal: 'minute',
+    visualNote: 'A time journey moves the minute hand forward around the clock.',
+  },
+  {
+    section: 2,
     sectionTitle: 'Minutes by five',
     type: 'quiz',
     prompt: 'One full trip around the clock equals how many minutes?',
@@ -134,7 +176,7 @@ const STEPS = [
   },
 ]
 
-function Tutorial({ onStart, onBack }) {
+function Tutorial({ onStart, onBack, onProgress }) {
   const [step, setStep] = useState(0)
   const [tapWrong, setTapWrong] = useState(false)
   const [wrongChoice, setWrongChoice] = useState(null)
@@ -152,13 +194,15 @@ function Tutorial({ onStart, onBack }) {
     setWrongChoice(null)
     setOutcomes((currentOutcomes) => {
       if (currentOutcomes.length > step) return currentOutcomes
-      return [
+      const nextOutcomes = [
         ...currentOutcomes,
         {
           prompt: current.prompt,
           correctFirstTry: mistakes === 0,
         },
       ]
+      if (onProgress) onProgress('clock-hands', nextOutcomes.length === STEPS.length && nextOutcomes.filter((outcome) => outcome.correctFirstTry).length >= Math.ceil(STEPS.length * 0.8) ? 'Mastered' : 'Practising')
+      return nextOutcomes
     })
   }
 

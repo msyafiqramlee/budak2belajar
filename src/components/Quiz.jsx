@@ -104,6 +104,10 @@ function Quiz({ onBack }) {
   const [history, setHistory] = useState([])
   const [showSummary, setShowSummary] = useState(false)
 
+  function buildPracticeChoices(nextQuestion) {
+    return buildChoices(nextQuestion)
+  }
+
   function startLevel(nextLevel) {
     const q = randomTime(nextLevel)
     setLevel(nextLevel)

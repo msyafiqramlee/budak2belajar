@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Menu from './components/Menu.jsx'
 import Tutorial from './components/Tutorial.jsx'
 import Quiz from './components/Quiz.jsx'
 import TopicMenu from './components/TopicMenu.jsx'
 import ModuleLesson, { MixedModuleLesson } from './components/ModuleLesson.jsx'
+import ProgressPanel from './components/ProgressPanel.jsx'
 import { FRACTION_MODULES, OPERATION_MODULES } from './content/learningContent.js'
 import './App.css'
 
@@ -13,14 +14,35 @@ const TOPICS = {
   fractions: { label: 'Fractions', icon: '½' },
 }
 
+const SKILL_ID_MAP = {
+  addition: 'operations-add',
+  subtraction: 'operations-subtract',
+  multiplication: 'operations-multiply',
+  division: 'operations-divide',
+  'fraction-foundations': 'fractions-parts',
+  'equivalent-compare': 'fractions-equivalent',
+  'fraction-add-subtract': 'fractions-add',
+  'fraction-multiply-divide': 'fractions-advanced',
+}
+
 function App() {
   const [topic, setTopic] = useState('clock')
   const [view, setView] = useState('menu')
   const [selectedModule, setSelectedModule] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [progress, setProgress] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('budak2belajar-progress') || '{}') } catch { return {} }
+  })
+  useEffect(() => {
+    localStorage.setItem('budak2belajar-progress', JSON.stringify(progress))
+  }, [progress])
   function navigate(nextView) { setView(nextView); setSidebarOpen(false) }
   function navigateTopic(nextTopic) { setTopic(nextTopic); setView('menu'); setSelectedModule(null); setSidebarOpen(false) }
   function openModule(module) { setSelectedModule(module); navigate('learn') }
+  function markProgress(skillId, status) {
+    const mappedSkillId = SKILL_ID_MAP[skillId] || skillId
+    setProgress((current) => ({ ...current, [`${topic}-${mappedSkillId}`]: status }))
+  }
 
   const current = TOPICS[topic]
   const pageTitle = view === 'learn' ? selectedModule?.title || 'Guided lesson' : view === 'quiz' ? `${current.label} practice` : `${current.label} learning path`
@@ -41,13 +63,14 @@ function App() {
         <div className="page-header"><div><p className="breadcrumb">Learning / {current.label}</p><h1>{pageTitle}</h1></div><span className="topic-status"><span /> You’ve got this!</span></div>
         <main className="workspace">
           {topic === 'clock' && view === 'menu' && <Menu onLearn={() => navigate('learn')} onPractice={() => navigate('quiz')} />}
-          {topic === 'clock' && view === 'learn' && <Tutorial onStart={() => navigate('quiz')} onBack={() => navigate('menu')} />}
+          {topic === 'clock' && view === 'learn' && <Tutorial onStart={() => navigate('quiz')} onBack={() => navigate('menu')} onProgress={markProgress} />}
           {topic === 'clock' && view === 'quiz' && <Quiz onBack={() => navigate('menu')} />}
           {topic === 'operations' && view === 'menu' && <TopicMenu type="operations" title="Number operations" subtitle="Master the four calculations that support fractions, measurement, money, and later mathematics." modules={OPERATION_MODULES} onSelect={openModule} onPractice={() => navigate('quiz')} />}
           {topic === 'fractions' && view === 'menu' && <TopicMenu type="fractions" title="Fractions" subtitle="Move from equal parts and fraction language to comparing and calculating with fractions." modules={FRACTION_MODULES} onSelect={openModule} onPractice={() => navigate('quiz')} onPrerequisite={() => navigateTopic('operations')} />}
-          {topic !== 'clock' && view === 'learn' && selectedModule && <ModuleLesson key={selectedModule.id} module={selectedModule} onBack={() => navigate('menu')} />}
+          {topic !== 'clock' && view === 'learn' && selectedModule && <ModuleLesson key={selectedModule.id} module={selectedModule} onBack={() => navigate('menu')} onProgress={markProgress} />}
           {topic === 'operations' && view === 'quiz' && <MixedModuleLesson title="number operations" modules={OPERATION_MODULES} onBack={() => navigate('menu')} />}
           {topic === 'fractions' && view === 'quiz' && <MixedModuleLesson title="fractions" modules={FRACTION_MODULES} onBack={() => navigate('menu')} />}
+          {view === 'menu' && <ProgressPanel topic={topic} progress={Object.fromEntries(Object.entries(progress).filter(([key]) => key.startsWith(`${topic}-`)).map(([key, status]) => [key.replace(`${topic}-`, ''), status]))} />}
         </main>
       </div>
     </div>
