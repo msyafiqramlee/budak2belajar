@@ -76,6 +76,14 @@
   --topic-accent-soft: var(--violet-soft);
 }
 
+.topic-kangaroo-12,
+.topic-kangaroo-34,
+.topic-kangaroo-56 {
+  --topic-accent: var(--amber);
+  --topic-accent-deep: var(--amber-deep);
+  --topic-accent-soft: var(--amber-soft);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -238,6 +246,55 @@ button {
 
 .nav-label-spaced {
   padding-top: 20px;
+}
+
+/* Plan A / Plan B switcher */
+.plan-switch {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.plan-card {
+  padding: 10px 12px;
+  color: #cfc9ec;
+  text-align: left;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: 160ms ease;
+}
+
+.plan-card strong {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.plan-card small {
+  display: block;
+  margin-top: 2px;
+  color: #9c94cb;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.plan-card:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.plan-card.active {
+  color: var(--ink);
+  border-color: var(--mint);
+  background: var(--mint);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.22);
+}
+
+.plan-card.active small {
+  color: #0c5c4c;
 }
 
 .nav-item {
@@ -1240,6 +1297,36 @@ button {
   font-weight: 800;
 }
 
+.timer-chip {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  border: 2px solid var(--amber);
+  border-radius: 12px;
+  background: var(--amber-soft);
+}
+
+.timer-chip.low {
+  color: var(--red);
+  border-color: var(--red);
+  background: var(--red-soft);
+}
+
+.points-badge {
+  margin-left: 8px;
+  padding: 5px 10px;
+  color: var(--mint-deep);
+  font-size: 0.64rem;
+  font-weight: 900;
+  border-radius: 999px;
+  background: var(--mint-soft);
+}
+
 .quiz-level-label {
   margin-right: auto;
   color: var(--topic-accent-deep);
@@ -1807,6 +1894,13 @@ button:focus-visible {
     radial-gradient(circle at 88% 12%, rgba(255, 176, 32, 0.3), transparent 36%),
     radial-gradient(circle at 10% 95%, rgba(59, 155, 233, 0.32), transparent 40%),
     linear-gradient(135deg, #7341e0 0%, #8b5cf6 55%, #b06cf9 100%);
+}
+
+.topic-library.kangaroo .library-hero {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(255, 240, 200, 0.4), transparent 36%),
+    radial-gradient(circle at 10% 95%, rgba(255, 126, 182, 0.3), transparent 40%),
+    linear-gradient(135deg, #d98f00 0%, #ffb020 55%, #ffcf5c 100%);
 }
 
 .library-hero h2 {

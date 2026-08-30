@@ -1,5 +1,23 @@
 const SKILL_STATUSES = ['New', 'Practising', 'Mastered']
 
+import { KANGAROO_LEVELS } from './kangarooContent.js'
+
+const KANGAROO_SKILLS = Object.fromEntries(
+  Object.values(KANGAROO_LEVELS).map((level) => [
+    level.id,
+    [
+      ...level.sets.map((set) => ({
+        id: set.id,
+        title: `${set.title} · ${level.category}`,
+        year: level.years,
+        status: 'New',
+        description: set.description,
+      })),
+      { id: `${level.id}-mock`, title: `${level.years} mock paper`, year: level.years, status: 'New', description: `A timed 10-question paper mixing every ${level.category} set.` },
+    ],
+  ]),
+)
+
 export const TOPIC_SKILLS = {
   clock: [
     { id: 'clock-hands', title: 'Meet the clock hands', year: 'Year 1', status: 'Practising', description: 'Tell the short hour hand from the long minute hand.' },
@@ -28,6 +46,7 @@ export const TOPIC_SKILLS = {
     { id: 'fractions-add', title: 'Add and subtract like fractions', year: 'Year 3', status: 'New', description: 'Combine parts with the same denominator.' },
     { id: 'fractions-advanced', title: 'Advanced fraction operations', year: 'Year 4+', status: 'New', description: 'Multiply and divide fractions when the foundations are ready.' },
   ],
+  ...KANGAROO_SKILLS,
 }
 
 export function getStatusCounts(topic) {
